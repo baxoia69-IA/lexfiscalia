@@ -907,6 +907,83 @@
 
     </div>
 
+    <section class="wrap" id="diagnostico" style="padding:40px 0;">
+  <h2 style="font-size:28px; margin-bottom:10px;">
+    No todos los casos requieren lo mismo
+  </h2>
+  <p style="color:#4b5563; margin-bottom:20px;">
+    Responde en 30 segundos y te indicamos la vía más adecuada para tu situación.
+  </p>
+
+  <div id="quiz-box">
+
+    <div class="step">
+      <p><strong>1. Tipo de situación</strong></p>
+      <button onclick="nextStep('tipo','IRPF')">IRPF personal</button>
+      <button onclick="nextStep('tipo','Autonomo')">Autónomo</button>
+      <button onclick="nextStep('tipo','Empresa')">Empresa</button>
+      <button onclick="nextStep('tipo','Inversion')">Inversión / patrimonio</button>
+    </div>
+
+  </div>
+
+  <div id="resultado" style="display:none; margin-top:20px;">
+    <h3 id="plan"></h3>
+    <p id="desc"></p>
+    <a id="cta" class="cta-button" target="_blank">Activar mi diagnóstico</a>
+  </div>
+</section>
+
+<script>
+let respuestas = {};
+
+function nextStep(key, value){
+  respuestas[key] = value;
+
+  if(key === 'tipo'){
+    document.getElementById("quiz-box").innerHTML = `
+      <p><strong>2. Impacto económico estimado</strong></p>
+      <button onclick="nextStep('impacto','bajo')">Menos de 1.000€</button>
+      <button onclick="nextStep('impacto','medio')">1.000€ - 10.000€</button>
+      <button onclick="nextStep('impacto','alto')">Más de 10.000€</button>
+    `;
+  }
+
+  else if(key === 'impacto'){
+    mostrarResultado();
+  }
+}
+
+function mostrarResultado(){
+  let plan = "";
+  let desc = "";
+  let link = "https://wa.me/34685870983?text=";
+
+  if(respuestas.impacto === "bajo"){
+    plan = "Recomendación: Diagnóstico Express";
+    desc = "Tu caso puede resolverse con una validación rápida y orientación clara.";
+    link += encodeURIComponent("Quiero activar diagnóstico express");
+  }
+  else if(respuestas.impacto === "medio"){
+    plan = "Recomendación: Diagnóstico Premium";
+    desc = "Tu situación requiere análisis más profundo y enfoque estratégico.";
+    link += encodeURIComponent("Quiero activar diagnóstico premium");
+  }
+  else{
+    plan = "Recomendación: Diagnóstico Ejecutivo";
+    desc = "Tu caso requiere una evaluación personalizada de alto nivel.";
+    link += encodeURIComponent("Quiero evaluación ejecutiva");
+  }
+
+  document.getElementById("quiz-box").style.display = "none";
+  document.getElementById("resultado").style.display = "block";
+
+  document.getElementById("plan").innerText = plan;
+  document.getElementById("desc").innerText = desc;
+  document.getElementById("cta").href = link;
+}
+</script>
+
     <!-- CIERRE FINAL -->
     <p style="
       margin-top:24px;
