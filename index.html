@@ -697,25 +697,6 @@
       </div>
     </section>
 
-    <footer style="padding:34px 0 54px;">
-      <div class="wrap footer-card">
-        <div>
-          <div class="brand" style="margin-bottom:12px;">
-            <span class="brand-mark"></span>
-            <span>LexFiscal<em>IA</em></span>
-          </div>
-          <div style="color:var(--muted);line-height:1.8;max-width:60ch;">
-            Optimización fiscal premium, filtro de casos con valor real y activación estratégica para clientes que buscan claridad, control y resultado.
-          </div>
-        </div>
-        <div style="display:grid;gap:10px;justify-items:start;">
-          <a href="#top">Volver arriba</a>
-          <a href="#sistema">Sistema</a>
-          <a href="#ventajas">Ventajas</a>
-          <a href="#inversion">Activación</a>
-        </div>
-      </div>
-    </footer>
   </main>
   <section class="wrap" style="padding:30px 0 10px;">
   <div style="
@@ -908,78 +889,28 @@
     </div>
 
 
-    <section style="padding:40px 20px; background:#f8fafc; border-top:1px solid #e5e7eb;">
-
-  <div style="max-width:720px; margin:auto; text-align:center;">
-
-    <h2 style="font-size:26px; margin-bottom:10px;">
-      Sistema de evaluación fiscal inteligente
-    </h2>
-
-    <p style="color:#6b7280; margin-bottom:25px;">
-      Analizando encaje con tu perfil...
-    </p>
-
-    <!-- Simulación sistema -->
-    <div id="simulacion" style="text-align:left; font-size:14px; color:#374151; margin-bottom:25px;">
-      ⏳ Inicializando análisis...
-    </div>
-
-    <!-- RESULTADO -->
-    <div id="resultadoFinal" style="display:none; background:#ffffff; padding:20px; border-radius:12px; border:1px solid #e5e7eb;">
-
-      <p style="font-weight:600; margin-bottom:10px;">
-        ✔ Encaje detectado con optimización fiscal
-      </p>
-
-      <p style="font-size:14px; color:#4b5563; margin-bottom:15px;">
-        Perfiles como el tuyo suelen estar perdiendo entre 
-        <strong>12.000€ y 38.000€ anuales</strong>.
-      </p>
-
-      <p style="font-size:13px; color:#6b7280; margin-bottom:20px;">
-        Esto puede suponer hasta <strong>114.000€ en 3 años</strong> si no se actúa.
-      </p>
-
-      <a id="ctaFinal" href="https://wa.me/34685870983?text=Quiero%20activar%20diagnóstico%20premium">
-         style="display:inline-block; padding:14px 22px; background:#1e3a8a; color:white; border-radius:8px; text-decoration:none; font-weight:600;">
-        Activar diagnóstico y bloquear revisión prioritaria
-      </a>
-
-    </div>
-
-  </div>
-
-    </section>
-
-    <script>
-
-const pasos = [
-  "🔍 Analizando estructura fiscal...",
-  "📊 Cruce de variables económicas...",
-  "🧠 Detectando oportunidades...",
-  "⚖️ Evaluando normativa aplicable...",
-  "✅ Encaje validado"
-];
-
-let i = 0;
-
-function ejecutarSimulacion() {
-  const contenedor = document.getElementById("simulacion");
-
-  const intervalo = setInterval(() => {
-    if (i < pasos.length) {
-      contenedor.innerHTML = pasos[i];
-      i++;
-    } else {
-      clearInterval(intervalo);
-      document.getElementById("resultadoFinal").style.display = "block";
-    }
-  }, 1200);
-}
-
-window.addEventListener("load", ejecutarSimulacion);
-
-  </script>
+    
 
     
+
+    <footer style="padding:34px 0 54px;">
+  <div class="wrap footer-card">
+    <div>
+      <div class="brand" style="margin-bottom:12px;">
+        <span class="brand-mark"></span>
+        <span>LexFiscalIA<em>IA</em></span>
+      </div>
+
+      <div style="color:var(--muted); line-height:1.6; max-width:60ch;">
+        Optimización fiscal premium, filtro de casos con valor real y activación estratégica para clientes que buscan claridad, control y resultado.
+      </div>
+    </div>
+
+    <div style="display:grid; gap:10px; justify-items:start;">
+      <a href="#top">Volver arriba</a>
+      <a href="#sistema">Sistema</a>
+      <a href="#ventajas">Ventajas</a>
+      <a href="#inversion">Activación</a>
+    </div>
+  </div>
+    </footer>
