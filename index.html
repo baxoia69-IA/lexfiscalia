@@ -1012,6 +1012,9 @@ function activarDiagnostico(e) {
   e.preventDefault();
 
   const boton = e.currentTarget;
+
+  if (boton.disabled) return;
+boton.disabled = true;
   boton.innerText = "Analizando tu caso...";
   boton.style.opacity = "0.7";
 
@@ -1044,7 +1047,14 @@ function activarDiagnostico(e) {
       boton.innerText = "Accediendo al diagnóstico...";
       
       setTimeout(() => {
-        window.location.href = "whatsapp://send?phone=34685870983&text=Hola%20Sonia,%20quiero%20activar%20mi%20diagnóstico%20premium";
+        const urlApp = "whatsapp://send?phone=34685870983&text=" + encodeURIComponent(mensaje);
+const urlWeb = "https://wa.me/34685870983?text=" + encodeURIComponent(mensaje);
+
+window.location.href = urlApp;
+
+setTimeout(() => {
+  window.location.href = urlWeb;
+}, 800);
       }, 1200);
     }
 
