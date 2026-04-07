@@ -1012,14 +1012,44 @@ function activarDiagnostico(e) {
   e.preventDefault();
 
   const boton = e.currentTarget;
-
-  boton.innerText = "Analizando encaje fiscal...";
+  boton.innerText = "Analizando tu caso...";
   boton.style.opacity = "0.7";
 
-  setTimeout(() => {
-    window.location.href = "https://wa.me/34685870983?text=Hola%20Sonia,%20quiero%20verificar%20si%20mi%20caso%20tiene%20optimización%20fiscal%20real";
-  }, 1200);
-}
+  const estados = [
+    "Analizando estructura fiscal...",
+    "Detectando ineficiencias...",
+    "Calculando fuga económica...",
+    "Verificando margen real...",
+    "Preparando recomendación..."
+  ];
+
+  const nodo = document.getElementById("estado-ia-final");
+
+  let i = 0;
+
+  const intervalo = setInterval(() => {
+    if (nodo) {
+      nodo.lastChild.textContent = " " + estados[i];
+    }
+
+    i++;
+
+    if (i >= estados.length) {
+      clearInterval(intervalo);
+
+      if (nodo) {
+        nodo.lastChild.textContent = " ✔ Optimización detectada";
+      }
+
+      boton.innerText = "Accediendo al diagnóstico...";
+      
+      setTimeout(() => {
+        window.location.href = "https://wa.me/34685870983?text=Hola%20Sonia,%20quiero%20activar%20mi%20diagnóstico%20premium";
+      }, 1200);
+    }
+
+  }, 900);
+      }
     </script>
     <script>
 (function () {
