@@ -897,6 +897,30 @@
 <section style="padding:60px 0 20px;">
 
   <!-- MENSAJE DE CIERRE -->
+  <div id="estado-ia-final" style="
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:18px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(56,210,122,.08);
+  border:1px solid rgba(56,210,122,.18);
+  color:#cfead8;
+  font-size:.82rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+">
+  <span style="
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#38d27a;
+    display:inline-block;
+    box-shadow:0 0 0 6px rgba(56,210,122,.14);
+  "></span>
+  Sistema evaluando encaje
+  </div>
   <div style="
     margin-bottom:28px;
     max-width:720px;
@@ -983,3 +1007,23 @@
     </div>
   </div>
     </footer>
+    <script>
+(function () {
+  const estados = [
+    "Sistema evaluando encaje",
+    "Analizando estructura fiscal",
+    "Cruzando variables clave",
+    "Verificando margen real",
+    "Ruta recomendada lista"
+  ];
+
+  const nodo = document.getElementById("estado-ia-final");
+  if (!nodo) return;
+
+  let i = 0;
+  setInterval(() => {
+    i = (i + 1) % estados.length;
+    nodo.lastChild.textContent = " " + estados[i];
+  }, 1800);
+})();
+      </script>
