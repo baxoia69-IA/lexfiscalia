@@ -1113,6 +1113,45 @@ if (bloque) {
 
   document.getElementById("prioridad").innerText =
     "Prioridad recomendada: " + prioridad;
+  // RESULTADO PRINCIPAL
+document.getElementById("encaje").innerText =
+  "Encaje con revisión: " + encaje;
+
+document.getElementById("complejidad").innerText =
+  "Complejidad estimada: " + complejidad;
+
+document.getElementById("prioridad").innerText =
+  "Prioridad recomendada: " + prioridad;
+
+
+// 🔥 CIERRE PREMIUM (RECOMENDACIÓN INTELIGENTE)
+
+let recomendacion = "Conviene validar si existe margen real de optimización.";
+let siguientePaso = "La vía razonable es una revisión inicial breve antes de decidir activación.";
+
+if (perfilUsuario === "Autónomo") {
+  recomendacion = "Se observan señales compatibles con posible recorrido de revisión.";
+  siguientePaso = "Lo más eficiente es validar estructura, deducciones y margen de optimización antes de mantener la situación actual.";
+}
+
+if (perfilUsuario === "Empresa") {
+  recomendacion = "El perfil presenta encaje claro para revisión estratégica prioritaria.";
+  siguientePaso = "Lo adecuado es revisar estructura societaria, fricciones fiscales y posibles áreas de mejora antes de seguir operando igual.";
+}
+
+if (perfilUsuario === "Inversor") {
+  recomendacion = "El perfil merece validación prioritaria por potencial complejidad y sensibilidad fiscal.";
+  siguientePaso = "La recomendación es revisar primero patrimonio, estructura y eficiencia global antes de descartar recorrido.";
+}
+
+if (perfilUsuario === "Particular") {
+  recomendacion = "Puede existir margen de revisión, aunque requiere validación previa.";
+  siguientePaso = "Lo razonable es confirmar primero si tu situación encaja con una revisión útil antes de activar nada.";
+}
+
+// 🔥 PINTAR RESULTADO FINAL
+document.getElementById("texto-recomendacion").innerText = recomendacion;
+document.getElementById("texto-siguiente-paso").innerText = siguientePaso;
 }
 
       if (nodo) {
