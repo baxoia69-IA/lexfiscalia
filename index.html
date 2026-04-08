@@ -1075,6 +1075,45 @@ boton.disabled = true;
 
     if (i >= estados.length) {
       clearInterval(intervalo);
+      const bloque = document.getElementById("diagnostico-pro");
+
+if (bloque) {
+  bloque.style.display = "block";
+
+  document.getElementById("perfil-detectado").innerText =
+    perfilUsuario ? "Perfil detectado: " + perfilUsuario : "";
+
+  let encaje = "Medio";
+  let complejidad = "Intermedia";
+  let prioridad = "Conveniente";
+
+  if (perfilUsuario === "Autónomo") {
+    encaje = "Alto";
+    complejidad = "Intermedia";
+    prioridad = "Prioritaria";
+  }
+
+  if (perfilUsuario === "Empresa") {
+    encaje = "Alto";
+    complejidad = "Avanzada";
+    prioridad = "Prioritaria";
+  }
+
+  if (perfilUsuario === "Inversor") {
+    encaje = "Alto";
+    complejidad = "Avanzada";
+    prioridad = "Prioritaria";
+  }
+
+  document.getElementById("encaje").innerText =
+    "Encaje con revisión: " + encaje;
+
+  document.getElementById("complejidad").innerText =
+    "Complejidad estimada: " + complejidad;
+
+  document.getElementById("prioridad").innerText =
+    "Prioridad recomendada: " + prioridad;
+}
 
       if (nodo) {
         nodo.lastChild.textContent = " ✔ Optimización detectada";
