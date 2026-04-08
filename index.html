@@ -1159,7 +1159,35 @@ document.getElementById("texto-siguiente-paso").innerText = siguientePaso;
       }
 
       boton.innerText = "Accediendo al diagnóstico...";
-      
+      let mensaje = "Hola Sonia, quiero revisar mi situación fiscal.";
+
+if (perfilUsuario === "Autónomo" && nivelInteres === "alto") {
+  mensaje = "Hola Sonia, soy perfil Autónomo. He visto señales de posible optimización y quiero activar el diagnóstico premium para revisar estructura, deducciones y margen real de mejora.";
+}
+else if (perfilUsuario === "Autónomo" && nivelInteres === "medio") {
+  mensaje = "Hola Sonia, soy perfil Autónomo. Antes de activar, quiero una revisión previa para confirmar si existe margen real de optimización.";
+}
+else if (perfilUsuario === "Empresa" && nivelInteres === "alto") {
+  mensaje = "Hola Sonia, soy perfil Empresa. He visto encaje claro para revisión estratégica y quiero activar el diagnóstico premium cuanto antes.";
+}
+else if (perfilUsuario === "Empresa" && nivelInteres === "medio") {
+  mensaje = "Hola Sonia, soy perfil Empresa. Quiero una revisión previa para validar si existe recorrido real de optimización antes de activar.";
+}
+else if (perfilUsuario === "Inversor" && nivelInteres === "alto") {
+  mensaje = "Hola Sonia, soy perfil Inversor. He visto señales compatibles con revisión prioritaria y quiero activar el diagnóstico premium para analizar patrimonio y eficiencia global.";
+}
+else if (perfilUsuario === "Inversor" && nivelInteres === "medio") {
+  mensaje = "Hola Sonia, soy perfil Inversor. Antes de activar, me gustaría validar si existe recorrido real de revisión patrimonial y fiscal.";
+}
+else if (perfilUsuario === "Particular" && nivelInteres === "alto") {
+  mensaje = "Hola Sonia, soy perfil Particular. He visto señales de posible optimización y quiero activar el diagnóstico premium para validar mi caso.";
+}
+else if (perfilUsuario === "Particular" && nivelInteres === "medio") {
+  mensaje = "Hola Sonia, soy perfil Particular. Quiero una revisión previa para confirmar si mi situación encaja con una revisión útil.";
+}
+else if (perfilUsuario) {
+  mensaje = "Hola Sonia, soy perfil " + perfilUsuario + " y quiero revisar mi situación fiscal.";
+      }
       setTimeout(() => {
         const urlApp = "whatsapp://send?phone=34685870983&text=" + encodeURIComponent(mensaje);
 const urlWeb = "https://wa.me/34685870983?text=" + encodeURIComponent(mensaje);
