@@ -1152,6 +1152,25 @@ if (perfilUsuario === "Particular") {
 // 🔥 PINTAR RESULTADO FINAL
 document.getElementById("texto-recomendacion").innerText = recomendacion;
 document.getElementById("texto-siguiente-paso").innerText = siguientePaso;
+  let mensajeDetectado = "Hemos detectado una oportunidad real en tu caso.";
+
+if (perfilUsuario === "Autónomo") {
+  mensajeDetectado = "Hemos detectado ineficiencias en deducciones y estructura fiscal de tu actividad.";
+}
+
+if (perfilUsuario === "Empresa") {
+  mensajeDetectado = "Hemos detectado fricción en estructura societaria y posibles ineficiencias fiscales relevantes.";
+}
+
+if (perfilUsuario === "Inversor") {
+  mensajeDetectado = "Hemos detectado ineficiencia en gestión patrimonial y oportunidades de optimización fiscal global.";
+}
+
+if (perfilUsuario === "Particular") {
+  mensajeDetectado = "Hemos detectado posibles áreas de mejora en tu situación fiscal actual.";
+}
+
+document.getElementById("titulo-resultado").innerText = mensajeDetectado;
 }
 
       if (nodo) {
