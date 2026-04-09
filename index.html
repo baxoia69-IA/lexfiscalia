@@ -1,1417 +1,1466 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LexFiscalIA | Optimización fiscal premium</title>
-  <meta name="description" content="LexFiscalIA detecta fugas fiscales, filtra casos con potencial real y activa una hoja de ruta premium con criterio experto." />
+  <meta charset="UTF-8">
+  <title>Asesoría Fiscal Internacional</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- FUENTES -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+
   <style>
-    :root{
-      --bg:#07111f;
-      --bg2:#0b1730;
-      --panel:rgba(255,255,255,.04);
-      --line:rgba(255,255,255,.08);
-      --text:#f4f7fb;
-      --muted:#aeb8ca;
-      --muted2:#8f9cb3;
-      --accent:#ff6d63;
-      --accent2:#d74444;
-      --success:#38d27a;
-      --shadow:0 24px 70px rgba(0,0,0,.38);
-      --radius:26px;
-      --serif:Georgia,"Times New Roman",serif;
-      --sans:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      --max:1180px;
+
+    :root {
+      --midnight: #0A1628;
+      --indigo: #1E2A4A;
+      --white: #FAF9F6;
+      --platinum: #F5F3EF;
+      --charcoal: #44403C;
+      --slate: #78716C;
+      --gold: #C9A227;
+      --success: #059669;
+      --warning: #D97706;
+      --error: #DC2626;
+      --info: #4F46E5;
+      --border: #D6D3CD;
     }
 
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
-      margin:0;
-      font-family:var(--sans);
-      color:var(--text);
-      background:
-        radial-gradient(circle at top right, rgba(255,109,99,.14), transparent 24%),
-        radial-gradient(circle at top left, rgba(255,255,255,.05), transparent 20%),
-        linear-gradient(180deg,#06101e 0%,#081426 42%,#07111f 100%);
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--charcoal);
     }
 
-    a{text-decoration:none;color:inherit}
-    .wrap{width:min(calc(100% - 28px),var(--max));margin:0 auto}
-
-    .topbar{
-      position:sticky;top:0;z-index:20;
-      backdrop-filter:blur(18px);
-      background:rgba(7,17,31,.72);
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .topbar-inner{
-      min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px;
-    }
-    .brand{display:flex;align-items:center;gap:12px;font-weight:700}
-    .brand-mark{
-      width:34px;height:34px;border-radius:10px;
-      background:linear-gradient(145deg,#f5eee5,#cbb39a 55%,#d74444);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 10px 24px rgba(0,0,0,.24);
-    }
-    .brand span{font-family:var(--serif);font-size:1.15rem;letter-spacing:-.03em}
-    .brand em{font-style:normal;color:#ff9288}
-    .nav{display:flex;gap:22px;align-items:center;color:var(--muted);font-size:.95rem}
-    .nav a:hover{color:var(--text)}
-    .nav-cta{
-      display:inline-flex;align-items:center;justify-content:center;
-      min-height:44px;padding:0 16px;border-radius:999px;
-      background:#f2ede4;color:#08111d;font-weight:700;
-      box-shadow:0 12px 24px rgba(0,0,0,.22);
+    h1, h2 {
+      font-family: 'Playfair Display', serif;
+      margin: 0;
     }
 
-    .hero{padding:46px 0 26px}
-    .hero-grid{
-      display:grid;grid-template-columns:1.08fr .92fr;gap:24px;align-items:stretch;
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
     }
 
-    .hero-copy,.hero-aside,.feature,.decision,.cta-band,.footer-card{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
+    .btn-primary {
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      background: transparent;
+      padding: 14px 26px;
+      cursor: pointer;
+      transition: 0.3s;
     }
 
-    .hero-copy{
-      padding:32px;
-      background:
-        linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015)),
-        linear-gradient(180deg,#0a1427 0%,#091321 100%);
-      position:relative;overflow:hidden;
-    }
-    .hero-copy::after{
-      content:"";position:absolute;right:-90px;bottom:-90px;width:220px;height:220px;
-      background:radial-gradient(circle,rgba(255,109,99,.18),transparent 65%);
-      pointer-events:none;
+    .btn-primary:hover {
+      background: var(--gold);
+      color: var(--midnight);
+      transform: translateY(-2px);
     }
 
-    .eyebrow{
-      display:inline-flex;align-items:center;gap:10px;padding:10px 14px;
-      border-radius:999px;border:1px solid rgba(255,109,99,.22);
-      background:rgba(255,109,99,.08);color:#f6d0cd;
-      font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;
-    }
-    .dot{
-      width:8px;height:8px;border-radius:50%;background:var(--success);
-      box-shadow:0 0 0 0 rgba(56,210,122,.45);animation:pulse 1.7s infinite;
-    }
-    @keyframes pulse{
-      0%{box-shadow:0 0 0 0 rgba(56,210,122,.45)}
-      70%{box-shadow:0 0 0 10px rgba(56,210,122,0)}
-      100%{box-shadow:0 0 0 0 rgba(56,210,122,0)}
+    .card {
+      border: 1px solid var(--border);
+      padding: 24px;
+      border-radius: 8px;
+      transition: 0.3s;
+      background: white;
     }
 
-    h1{
-      margin:22px 0 18px;font-family:var(--serif);font-size:clamp(3rem,7vw,6.2rem);
-      line-height:.93;letter-spacing:-.06em;max-width:11ch;
-    }
-    h1 .accent{color:#ff958a;font-style:italic}
-    .lead{
-      margin:0;max-width:680px;color:var(--muted);line-height:1.82;font-size:1.05rem;
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--gold);
     }
 
-    .metric-row{
-      display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:26px 0 24px;
+    .grid {
+      display: grid;
+      gap: 20px;
     }
-    .metric{
-      border:1px solid var(--line);border-radius:18px;padding:16px;background:rgba(255,255,255,.03);
-    }
-    .metric small{
-      display:block;color:var(--muted2);font-size:.68rem;text-transform:uppercase;
-      letter-spacing:.14em;margin-bottom:10px;
-    }
-    .metric strong{
-      display:block;font-family:var(--serif);font-size:2rem;line-height:1;letter-spacing:-.05em;margin-bottom:8px;
-    }
-    .metric p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.55}
 
-    .actions{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 16px}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:10px;
-      min-height:56px;padding:0 24px;border-radius:16px;font-weight:800;
-      transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
-    }
-    .btn:hover{transform:translateY(-1px)}
-    .btn-primary{
-      color:#08111d;background:linear-gradient(135deg,#f3eee6,#fff8ef);
-      box-shadow:0 18px 34px rgba(0,0,0,.28);
-    }
-    .btn-secondary{
-      color:var(--text);background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
-    }
-    .mini-proof{display:flex;flex-wrap:wrap;gap:16px;color:var(--muted2);font-size:.88rem}
-    .mini-proof span::before{content:"•";color:var(--success);margin-right:8px}
-
-    .hero-aside{
-      padding:24px;
-      background:
-        linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015)),
-        linear-gradient(180deg,#0c1629 0%,#091220 100%);
-      display:flex;flex-direction:column;gap:14px;
-    }
-    .aside-top{display:flex;justify-content:space-between;gap:12px;align-items:center;color:var(--muted);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase}
-    .live-pill{
-      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;
-      background:rgba(56,210,122,.1);border:1px solid rgba(56,210,122,.22);color:#c5f3d6;
-    }
-    .terminal{
-      border:1px solid rgba(255,255,255,.07);border-radius:22px;overflow:hidden;
-      background:linear-gradient(180deg,#04070d 0%,#08101a 100%);
-    }
-    .terminal-head{
-      display:flex;justify-content:space-between;align-items:center;gap:10px;
-      padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);
-      color:#b7c1d4;font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;
-    }
-    .terminal-body{padding:18px;color:#cbd5e5;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9rem;line-height:1.9;min-height:220px}
-    .terminal-body .red{color:#ff8376}
-    .terminal-body .green{color:#8fe1aa}
-    .terminal-body .gold{color:#f5ce7b}
-
-    .score-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .score-box{
-      border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:16px;background:rgba(255,255,255,.03);
-    }
-    .score-box small{display:block;color:var(--muted2);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
-    .score-box strong{display:block;font-family:var(--serif);font-size:2rem;line-height:1;letter-spacing:-.05em;margin-bottom:8px}
-    .score-box p{margin:0;color:var(--muted);font-size:.88rem;line-height:1.55}
-
-    .section-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:22px}
-    .section-head h2{margin:0;font-family:var(--serif);font-size:clamp(2.2rem,4vw,4rem);line-height:.96;letter-spacing:-.05em;max-width:10ch}
-    .section-head p{margin:0;max-width:560px;color:var(--muted);line-height:1.8}
-
-    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .feature{padding:22px}
-    .feature h3{margin:0 0 12px;font-family:var(--serif);font-size:1.9rem;line-height:.98;letter-spacing:-.04em}
-    .feature p{margin:0;color:var(--muted);line-height:1.78}
-
-    .decision{padding:26px;margin-top:18px}
-    .decision h3{margin:0 0 14px;font-family:var(--font-serif);font-size:clamp(2rem,4vw,3.2rem);line-height:.96;letter-spacing:-.05em}
-    .decision p{margin:0 0 18px;color:var(--muted);line-height:1.82}
-    .decision-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    .decision-box{border:1px solid var(--line);border-radius:18px;padding:18px;background:rgba(255,255,255,.025)}
-    .decision-box small{display:block;color:var(--muted2);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
-    .decision-box strong{display:block;font-family:var(--serif);font-size:2rem;letter-spacing:-.05em;line-height:1;margin-bottom:10px}
-    .decision-box span{display:block;color:var(--muted);line-height:1.7;font-size:.92rem}
   </style>
 </head>
+
 <body>
-  <header class="topbar">
-    <div class="wrap topbar-inner">
-      <a href="#top" class="brand">
-        <span class="brand-mark"></span>
-        <span>LexFiscal<em>IA</em></span>
-      </a>
-      <nav class="nav">
-        <a href="#sistema">Sistema</a>
-        <a href="#ventajas">Ventajas</a>
-        <a href="#impacto">Impacto</a>
-        <a href="#inversion">Activación</a>
-        <a class="nav-cta" href="#inversion">Solicitar diagnóstico</a>
-      </nav>
-    </div>
-  </header>
+  <section class="container" style="padding-top:80px; padding-bottom:80px;">
 
-  <main id="top">
-    <section class="hero">
-      <div class="wrap hero-grid">
-        <div class="hero-copy">
-          <div class="eyebrow"><span class="dot"></span>Optimización fiscal selectiva</div>
-          <h1>Su patrimonio tiene una <span class="accent">fuga silenciosa</span>. Es hora de sellarla.</h1>
-          <p class="lead">
-            LexFiscalIA convierte complejidad tributaria en decisiones ejecutivas claras. Detecta ineficiencias, filtra casos con optimización real y activa una hoja de ruta premium con criterio experto.
-          </p>
+  <h1 style="font-size:42px; line-height:1.2; max-width:800px;">
+    Fiscalidad internacional, patrimonio y estructuras complejas.
+  </h1>
 
-          <div class="metric-row">
-            <article class="metric">
-              <small>Potencial detectado</small>
-              <strong>€2.1M–€2.8M</strong>
-              <p>Rango premium para estructuras con fricción patrimonial y margen claro de mejora.</p>
-            </article>
-            <article class="metric">
-              <small>Pérdida por inacción</small>
-              <strong>€1.420/mes</strong>
-              <p>La ineficiencia no espera: erosiona capital mientras no se corrige.</p>
-            </article>
-            <article class="metric">
-              <small>Prioridad de revisión</small>
-              <strong>24h</strong>
-              <p>Respuesta ejecutiva, hoja de ruta inicial y siguiente paso recomendado.</p>
-            </article>
-          </div>
+  <p style="margin-top:20px; max-width:600px; color:var(--slate); font-size:18px;">
+    No es asesoramiento estándar. Analizamos situaciones reales con impacto fiscal relevante en España y entorno internacional.
+  </p>
 
-          <div class="actions">
-            <a class="btn btn-primary" href="#inversion">Iniciar diagnóstico premium</a>
-            <a class="btn btn-secondary" href="#sistema">Ver cómo funciona</a>
-          </div>
+  <div style="margin-top:30px;">
+    <button class="btn-primary">
+      Evaluar mi situación
+    </button>
+  </div>
 
-          <div class="mini-proof">
-            <span>Filtro de casos con optimización real</span>
-            <span>Enfoque boutique de alto valor</span>
-            <span>Activación premium y clara</span>
-          </div>
-        </div>
+  </section>
+  <section class="container" style="padding-top:20px; padding-bottom:80px;">
 
-        <aside class="hero-aside">
-          <div class="aside-top">
-            <span>Live erosion feed</span>
-            <span class="live-pill"><span class="dot"></span>Sistema activo</span>
-          </div>
+  <h2 style="font-size:30px; margin-bottom:16px;">
+    Áreas de especialización
+  </h2>
 
-          <div class="terminal">
-            <div class="terminal-head">
-              <span>diagnóstico fiscal</span>
-              <span>secure session</span>
-            </div>
-            <div class="terminal-body">
-              <div>&gt; Analizando estructura fiscal y fricción patrimonial...</div>
-              <div>&gt; Cruzando variables de residencia, ingresos y optimización...</div>
-              <div class="red">&gt; Posible ineficiencia detectada en tratamiento y diseño estructural.</div>
-              <div>&gt; Calculando pérdida por inacción y ventana de mejora...</div>
-              <div class="gold">&gt; Prioridad estratégica: media-alta.</div>
-              <div class="green">&gt; Recomendación: activar diagnóstico premium.</div>
-            </div>
-          </div>
+  <p style="max-width:720px; color:var(--slate); margin-bottom:32px; line-height:1.7;">
+    La firma está orientada a estructuras, patrimonio y decisiones fiscales complejas. No está diseñada para consultas generales ni para asesoramiento masivo.
+  </p>
 
-          <div class="score-grid">
-            <div class="score-box">
-              <small>Confianza del motor</small>
-              <strong>94.2%</strong>
-              <p>Consistencia alta entre patrón detectado y oportunidad accionable.</p>
-            </div>
-            <div class="score-box">
-              <small>Estado actual</small>
-              <strong style="color:#ff8376;">Crítico</strong>
-              <p>La pérdida sigue activa mientras no se corrija la estructura.</p>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </section>
+  <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));">
 
-    <section class="wrap" id="sistema" style="padding:18px 0 12px;">
-      <div class="section-head">
-        <h2>Sistema de diagnóstico premium.</h2>
-        <p>
-          La diferencia entre una web bonita y una web de alto valor está aquí:
-          el usuario deja de mirar y empieza a participar en una experiencia que
-          filtra, interpreta y prepara la mejor vía de activación.
-        </p>
-      </div>
-
-      <div style="
-        display:grid;
-        grid-template-columns:1.05fr .95fr;
-        gap:22px;
-        align-items:stretch;
-      ">
-        <section style="
-          border:1px solid rgba(255,255,255,.08);
-          border-radius:28px;
-          background:
-            linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)),
-            linear-gradient(180deg, #0a1528 0%, #091220 100%);
-          box-shadow:0 24px 70px rgba(0,0,0,.34);
-          overflow:hidden;
-        ">
-          <div style="
-            display:flex;
-            justify-content:space-between;
-            gap:12px;
-            align-items:center;
-            padding:16px 18px;
-            border-bottom:1px solid rgba(255,255,255,.06);
-            color:#aab6cc;
-            font-size:.78rem;
-            text-transform:uppercase;
-            letter-spacing:.12em;
-          ">
-            <span>Diagnóstico guiado</span>
-            <span style="
-              display:inline-flex;
-              align-items:center;
-              gap:8px;
-              padding:8px 10px;
-              border-radius:999px;
-              background:rgba(56,210,122,.08);
-              border:1px solid rgba(56,210,122,.18);
-              color:#c7f4d7;
-            ">
-              <span style="
-                width:8px;height:8px;border-radius:50%;
-                background:#38d27a;display:inline-block;
-              "></span>
-              AI Ready
-            </span>
-          </div>
-
-          <div style="padding:22px;">
-            <div style="
-              display:grid;
-              grid-template-columns:repeat(4,1fr);
-              gap:8px;
-              margin-bottom:20px;
-            ">
-              <div style="height:6px;border-radius:999px;background:#ff7468;"></div>
-              <div style="height:6px;border-radius:999px;background:rgba(255,255,255,.08);"></div>
-              <div style="height:6px;border-radius:999px;background:rgba(255,255,255,.08);"></div>
-              <div style="height:6px;border-radius:999px;background:rgba(255,255,255,.08);"></div>
-            </div>
-
-            <small style="
-              display:block;
-              color:#97a5bd;
-              text-transform:uppercase;
-              letter-spacing:.14em;
-              font-size:.68rem;
-              margin-bottom:12px;
-            ">Paso 1 · Perfil</small>
-
-            <h3 style="
-              margin:0 0 18px;
-              font-family:Georgia,'Times New Roman',serif;
-              font-size:clamp(1.9rem,4vw,3rem);
-              line-height:.98;
-              letter-spacing:-.05em;
-            ">¿Cuál es tu perfil actual?</h3>
-
-            <div style="
-              display:grid;
-              grid-template-columns:1fr 1fr;
-              gap:12px;
-            ">
-              <button style="
-                min-height:74px;
-                border-radius:18px;
-                border:1px solid rgba(255,255,255,.08);
-                background:rgba(255,255,255,.04);
-                color:#f4f7fb;
-                text-align:left;
-                padding:16px;
-                font-weight:700;
-                font-size:.96rem;
-                cursor:pointer;
-              ">Particular con ingresos elevados</button>
-
-              <button style="
-                min-height:74px;
-                border-radius:18px;
-                border:1px solid rgba(255,255,255,.08);
-                background:rgba(255,255,255,.04);
-                color:#f4f7fb;
-                text-align:left;
-                padding:16px;
-                font-weight:700;
-                font-size:.96rem;
-                cursor:pointer;
-              ">Autónomo / profesional</button>
-
-              <button style="
-                min-height:74px;
-                border-radius:18px;
-                border:1px solid rgba(255,255,255,.08);
-                background:rgba(255,255,255,.04);
-                color:#f4f7fb;
-                text-align:left;
-                padding:16px;
-                font-weight:700;
-                font-size:.96rem;
-                cursor:pointer;
-              ">Empresa / sociedad</button>
-
-              <button style="
-                min-height:74px;
-                border-radius:18px;
-                border:1px solid rgba(255,255,255,.08);
-                background:rgba(255,255,255,.04);
-                color:#f4f7fb;
-                text-align:left;
-                padding:16px;
-                font-weight:700;
-                font-size:.96rem;
-                cursor:pointer;
-              ">Inversor / patrimonio</button>
-            </div>
-
-            <div style="
-              margin-top:18px;
-              display:flex;
-              flex-wrap:wrap;
-              gap:12px;
-            ">
-              <a class="btn-primary" href="#inversion" style="
-                display:inline-flex;
-                align-items:center;
-                justify-content:center;
-                min-height:54px;
-                padding:0 22px;
-                border-radius:16px;
-                background:linear-gradient(135deg,#f3eee6,#fff8ef);
-                color:#08111d;
-                font-weight:800;
-                box-shadow:0 18px 34px rgba(0,0,0,.24);
-              ">Continuar diagnóstico</a>
-              
-              <section style="padding:30px 0 10px;">
-
-  <div style="
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:20px;
-    padding:20px;
-    background:rgba(255,255,255,.03);
-  ">
-
-    <h2 style="margin-bottom:10px;">
-      Hemos detectado una <span style="color:#ff8a80;">oportunidad real</span>
-    </h2>
-
-    <p style="color:#aeb8ca;">
-      Tu perfil presenta señales claras de ineficiencia fiscal.
-      Esto se traduce en pérdida económica real si no se actúa.
-    </p>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px;">
-
-      <div style="padding:10px;border:1px solid rgba(255,255,255,.08);border-radius:10px;">
-        <strong>€12K – €38K</strong><br>
-        <small>Pérdida anual estimada</small>
-      </div>
-
-      <div style="padding:10px;border:1px solid rgba(255,255,255,.08);border-radius:10px;">
-        <strong style="color:#ff8a80;">Alta</strong><br>
-        <small>Prioridad de actuación</small>
-      </div>
-
+    <div class="card">
+      <h3 style="margin-top:0;">Fiscalidad internacional</h3>
+      <p style="color:var(--slate); line-height:1.7;">
+        Residencia fiscal, doble imposición, no residentes y estructuras con exposición en varias jurisdicciones.
+      </p>
     </div>
 
-    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
+    <div class="card">
+      <h3 style="margin-top:0;">Patrimonio y optimización</h3>
+      <p style="color:var(--slate); line-height:1.7;">
+        Revisión de estructuras con impacto patrimonial relevante y decisiones fiscales de alto valor económico.
+      </p>
+    </div>
 
-      <a href="#" style="
-        padding:12px 16px;
-        background:#fff;
-        color:#000;
-        border-radius:10px;
-        font-weight:bold;
-        text-decoration:none;
-      ">
-        Activar diagnóstico
-      </a>
+    <div class="card">
+      <h3 style="margin-top:0;">Herencias internacionales</h3>
+      <p style="color:var(--slate); line-height:1.7;">
+        Sucesión, transmisión patrimonial y herencias con elementos en España y otras jurisdicciones.
+      </p>
+    </div>
 
-      <a href="https://wa.me/34685870983" style="
-        padding:12px 16px;
-        border:1px solid rgba(255,255,255,.2);
-        border-radius:10px;
-        text-decoration:none;
-        color:#fff;
-      ">
-        WhatsApp
-      </a>
+    <div class="card">
+      <h3 style="margin-top:0;">Grandes autónomos</h3>
+      <p style="color:var(--slate); line-height:1.7;">
+        Actividades con alta facturación, estructuras ineficientes y escenarios donde una mala decisión fiscal tiene coste real.
+      </p>
+    </div>
 
+    <div class="card">
+      <h3 style="margin-top:0;">Criptoactivos</h3>
+      <p style="color:var(--slate); line-height:1.7;">
+        Inversores con operativa compleja, regularización, riesgo oculto y necesidad de criterio técnico.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0;">Sociedades y estructuras</h3>
+      <p style="color:var(--slate); line-height:1.7;">
+        Revisión de vehículos societarios, eficiencia estructural y planificación antes de decisiones relevantes.
+      </p>
     </div>
 
   </div>
 
-              </section>
+  </section>
+  <section class="container" style="padding-top:20px; padding-bottom:80px;">
 
-              <span style="
-                display:inline-flex;
-                align-items:center;
-                color:#8f9cb3;
-                font-size:.9rem;
-              ">≈ 45 segundos · Sin compromiso</span>
-            </div>
-          </div>
-        </section>
+  <h2 style="font-size:30px; margin-bottom:16px;">
+    Situaciones reales analizadas
+  </h2>
 
-        <aside style="
-          display:grid;
-          gap:14px;
-        ">
-          <article style="
-            border:1px solid rgba(255,255,255,.08);
-            border-radius:24px;
-            background:rgba(255,255,255,.03);
-            box-shadow:0 24px 70px rgba(0,0,0,.28);
-            padding:20px;
-          ">
-            <small style="
-              display:block;
-              color:#9aabc5;
-              text-transform:uppercase;
-              letter-spacing:.14em;
-              font-size:.66rem;
-              margin-bottom:10px;
-            ">Objetivo del sistema</small>
+  <p style="max-width:720px; color:var(--slate); margin-bottom:32px; line-height:1.7;">
+    Ejemplos anonimizados de casos donde una decisión fiscal incorrecta tenía impacto económico relevante.
+  </p>
 
-            <strong style="
-              display:block;
-              font-family:Georgia,'Times New Roman',serif;
-              font-size:2rem;
-              line-height:.98;
-              letter-spacing:-.05em;
-              margin-bottom:12px;
-            ">Filtrar antes de vender.</strong>
+  <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));">
 
-            <p style="
-              margin:0;
-              color:#aeb8ca;
-              line-height:1.72;
-              font-size:.94rem;
-            ">
-              El diagnóstico no está pensado para entretener. Está pensado para
-              detectar perfiles con optimización real y separar curiosidad de
-              oportunidad económica seria.
-            </p>
-          </article>
+    <div class="card">
+      <h3 style="margin-top:0;">Residencia fiscal mal planteada</h3>
+      <p style="color:var(--slate);">
+        Traslado internacional con riesgo de doble residencia y exposición a doble tributación.
+      </p>
+      <p style="font-size:14px; color:var(--slate);">
+        → Se detectó conflicto con normativa española y convenios internacionales.
+      </p>
+    </div>
 
-          <article style="
-            border:1px solid rgba(255,255,255,.08);
-            border-radius:24px;
-            background:rgba(255,255,255,.03);
-            box-shadow:0 24px 70px rgba(0,0,0,.28);
-            padding:20px;
-          ">
-            <small style="
-              display:block;
-              color:#9aabc5;
-              text-transform:uppercase;
-              letter-spacing:.14em;
-              font-size:.66rem;
-              margin-bottom:10px;
-            ">Salida esperada</small>
+    <div class="card">
+      <h3 style="margin-top:0;">Autónomo con estructura ineficiente</h3>
+      <p style="color:var(--slate);">
+        Actividad con facturación elevada tributando en un esquema no optimizado.
+      </p>
+      <p style="font-size:14px; color:var(--slate);">
+        → Existía margen de mejora con impacto económico anual significativo.
+      </p>
+    </div>
 
-            <strong style="
-              display:block;
-              font-family:Georgia,'Times New Roman',serif;
-              font-size:2rem;
-              line-height:.98;
-              letter-spacing:-.05em;
-              margin-bottom:12px;
-            ">Resultado + siguiente paso.</strong>
+    <div class="card">
+      <h3 style="margin-top:0;">Inversor en cripto sin planificación</h3>
+      <p style="color:var(--slate);">
+        Operativa compleja sin control fiscal ni estrategia declarativa.
+      </p>
+      <p style="font-size:14px; color:var(--slate);">
+        → Riesgo de regularización y contingencias tributarias relevantes.
+      </p>
+    </div>
 
-            <p style="
-              margin:0 0 14px;
-              color:#aeb8ca;
-              line-height:1.72;
-              font-size:.94rem;
-            ">
-              El usuario debe terminar con una de estas dos decisiones:
-            </p>
+  </div>
 
-            <ul style="
-              margin:0;
-              padding-left:18px;
-              color:#aeb8ca;
-              line-height:1.7;
-              font-size:.93rem;
-            ">
-              <li>Activar diagnóstico premium ahora</li>
-              <li>Solicitar revisión previa con experta</li>
-            </ul>
-          </article>
+  </section>
+  <section class="container" style="padding-top:20px; padding-bottom:80px;" id="evaluacion">
 
-          <article style="
-            border:1px solid rgba(255,255,255,.08);
-            border-radius:24px;
-            background:linear-gradient(180deg, rgba(255,109,99,.10), rgba(255,255,255,.02));
-            box-shadow:0 24px 70px rgba(0,0,0,.28);
-            padding:20px;
-          ">
-            <small style="
-              display:block;
-              color:#f0c4bf;
-              text-transform:uppercase;
-              letter-spacing:.14em;
-              font-size:.66rem;
-              margin-bottom:10px;
-            ">Presión elegante</small>
+  <h2 style="font-size:30px; margin-bottom:16px;">
+    Evaluación inicial
+  </h2>
 
-            <strong style="
-              display:block;
-              font-family:Georgia,'Times New Roman',serif;
-              font-size:2rem;
-              line-height:.98;
-              letter-spacing:-.05em;
-              margin-bottom:12px;
-            ">No actuar también es una decisión.</strong>
+  <p style="max-width:760px; color:var(--slate); margin-bottom:32px; line-height:1.7;">
+    Esta evaluación está diseñada para identificar si existe recorrido real de revisión en situaciones fiscales complejas. No sustituye un análisis profesional completo.
+  </p>
 
-            <p style="
-              margin:0;
-              color:#d6c4c4;
-              line-height:1.72;
-              font-size:.94rem;
-            ">
-              La diferencia entre seguir perdiendo o empezar a corregir está en
-              completar el diagnóstico y elegir la vía correcta de activación.
-            </p>
-          </article>
-        </aside>
+  <div class="card" style="max-width:820px;">
+
+    <div style="margin-bottom:24px;">
+      <label for="perfil" style="display:block; margin-bottom:8px; font-weight:600;">Perfil</label>
+      <select id="perfil" class="input" style="width:100%; padding:14px; border:1px solid var(--border); border-radius:6px;">
+        <option value="">Selecciona una opción</option>
+        <option value="particular">Particular con patrimonio o complejidad fiscal</option>
+        <option value="autonomo">Gran autónomo / profesional</option>
+        <option value="empresa">Sociedad / estructura empresarial</option>
+        <option value="inversor">Inversor / patrimonio / cripto</option>
+        <option value="herencia">Herencia / sucesión internacional</option>
+      </select>
+    </div>
+
+    <div style="margin-bottom:24px;">
+      <label for="situacion" style="display:block; margin-bottom:8px; font-weight:600;">Situación principal</label>
+      <select id="situacion" class="input" style="width:100%; padding:14px; border:1px solid var(--border); border-radius:6px;">
+        <option value="">Selecciona una opción</option>
+        <option value="internacional">Residencia, no residencia o doble imposición</option>
+        <option value="estructura">Estructura societaria o eficiencia fiscal</option>
+        <option value="patrimonio">Patrimonio relevante y optimización</option>
+        <option value="cripto">Operativa en criptoactivos</option>
+        <option value="sucesion">Herencia, donación o transmisión patrimonial</option>
+      </select>
+    </div>
+
+    <div style="margin-bottom:24px;">
+      <label for="impacto" style="display:block; margin-bottom:8px; font-weight:600;">Impacto económico percibido</label>
+      <select id="impacto" class="input" style="width:100%; padding:14px; border:1px solid var(--border); border-radius:6px;">
+        <option value="">Selecciona una opción</option>
+        <option value="medio">Relevante</option>
+        <option value="alto">Alto</option>
+        <option value="muy-alto">Muy alto</option>
+      </select>
+    </div>
+
+    <div style="margin-bottom:32px;">
+      <label for="urgencia" style="display:block; margin-bottom:8px; font-weight:600;">Urgencia</label>
+      <select id="urgencia" class="input" style="width:100%; padding:14px; border:1px solid var(--border); border-radius:6px;">
+        <option value="">Selecciona una opción</option>
+        <option value="baja">Sin urgencia inmediata</option>
+        <option value="media">Conviene revisar pronto</option>
+        <option value="alta">Debe revisarse cuanto antes</option>
+      </select>
+    </div>
+
+    <button class="btn-primary" onclick="ejecutarEvaluacion()">
+      Generar evaluación inicial
+    </button>
+
+  </div>
+
+  </section>
+  <section class="container" style="padding-top:20px; padding-bottom:80px;" id="resultado-panel">
+
+  <div id="resultadoCard" class="card" style="display:none; max-width:920px; background:var(--midnight); color:var(--white); border:none;">
+
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:20px; flex-wrap:wrap; margin-bottom:24px;">
+      <div>
+        <p style="margin:0 0 10px; color:#c7c9d1; font-size:13px; letter-spacing:0.08em; text-transform:uppercase;">
+          Evaluación inicial completada
+        </p>
+        <h2 id="resultadoTitulo" style="font-size:32px; line-height:1.2; max-width:620px;">
+          Posible recorrido de revisión detectado
+        </h2>
       </div>
-    </section>
-    <section class="wrap" id="ventajas" style="padding:34px 0 18px;">
-      <div class="section-head">
-        <h2>Arquitectura premium de decisión.</h2>
-        <p>
-          Esta no es una web fiscal genérica. Es una interfaz pensada para detectar valor, filtrar clientes de alto potencial y convertir una fuga silenciosa en una decisión estratégica.
+
+      <div style="padding:10px 14px; border:1px solid rgba(255,255,255,0.15); border-radius:999px; font-size:13px; color:#d7d9df;">
+        España · Fiscalidad internacional
+      </div>
+    </div>
+
+    <p id="resultadoIntro" style="max-width:760px; color:#d7d9df; line-height:1.8; margin-bottom:28px;">
+      La evaluación indica si merece la pena revisar el caso con mayor profundidad antes de tomar decisiones fiscales relevantes.
+    </p>
+
+    <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); margin-bottom:28px;">
+
+      <div class="card" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:var(--white);">
+        <p style="margin:0 0 8px; color:#c7c9d1; font-size:13px;">Encaje con revisión</p>
+        <p id="encajeValor" style="margin:0; font-size:26px; font-family:'JetBrains Mono', monospace;">—</p>
+      </div>
+
+      <div class="card" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:var(--white);">
+        <p style="margin:0 0 8px; color:#c7c9d1; font-size:13px;">Complejidad estimada</p>
+        <p id="complejidadValor" style="margin:0; font-size:26px; font-family:'JetBrains Mono', monospace;">—</p>
+      </div>
+
+      <div class="card" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:var(--white);">
+        <p style="margin:0 0 8px; color:#c7c9d1; font-size:13px;">Prioridad sugerida</p>
+        <p id="prioridadValor" style="margin:0; font-size:26px; font-family:'JetBrains Mono', monospace; color:#E5D4A1;">—</p>
+      </div>
+
+    </div>
+
+    <div class="grid" style="grid-template-columns:1fr; gap:18px;">
+
+      <div class="card" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:var(--white);">
+        <p style="margin:0 0 8px; color:#c7c9d1; font-size:13px; letter-spacing:0.08em; text-transform:uppercase;">
+          Interpretación
+        </p>
+        <p id="interpretacionTexto" style="margin:0; line-height:1.8; color:#f1f2f5;">
+          —
         </p>
       </div>
 
-      <div class="grid-3">
-        <article class="feature">
-          <h3>Filtro inteligente</h3>
-          <p>No trabajamos con ruido. La experiencia está diseñada para separar curiosidad de oportunidad real de optimización.</p>
-        </article>
-        <article class="feature">
-          <h3>Percepción boutique</h3>
-          <p>La interfaz transmite criterio, autoridad y tratamiento premium desde el primer segundo.</p>
-        </article>
-        <article class="feature">
-          <h3>Conversión elegante</h3>
-          <p>No presionamos. Ordenamos la decisión para que avanzar parezca la consecuencia lógica del diagnóstico.</p>
-        </article>
-      </div>
-
-      <div class="decision" id="impacto">
-        <h3>La diferencia entre seguir perdiendo capital o recuperarlo es el siguiente paso.</h3>
-        <p>
-          LexFiscalIA identifica fricción, estima impacto y prepara una activación premium para casos donde existe margen real de mejora. Si has llegado hasta aquí, ya sabes que el problema existe. Ahora toca decidir cómo resolverlo.
+      <div class="card" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:var(--white);">
+        <p style="margin:0 0 8px; color:#c7c9d1; font-size:13px; letter-spacing:0.08em; text-transform:uppercase;">
+          Recomendación
         </p>
-
-        <div class="decision-row">
-          <div class="decision-box">
-            <small>Escenario actual</small>
-            <strong>Inacción</strong>
-            <span>Mantiene la pérdida silenciosa, la complejidad sin ordenar y una sensación constante de estar pagando más de lo debido.</span>
-          </div>
-          <div class="decision-box" id="inversion">
-            <small>Siguiente paso</small>
-            <strong>Diagnóstico premium</strong>
-            <span>Activa revisión ejecutiva, priorización de riesgos y una hoja de ruta clara con criterio experto.</span>
-          </div>
-        </div>
+        <p id="recomendacionTexto" style="margin:0; line-height:1.8; color:#f1f2f5;">
+          —
+        </p>
       </div>
-    </section>
 
-  </main>
-  <section class="wrap" style="padding:30px 0 10px;">
-  <div style="
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:28px;
-    padding:28px;
-    background:
-      linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)),
-      linear-gradient(180deg, #0a1528 0%, #091220 100%);
-    box-shadow:0 24px 70px rgba(0,0,0,.34);
-  ">
+      <div class="card" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:var(--white);">
+        <p style="margin:0 0 8px; color:#c7c9d1; font-size:13px; letter-spacing:0.08em; text-transform:uppercase;">
+          Siguiente paso sugerido
+        </p>
+        <p id="siguientePasoTexto" style="margin:0; line-height:1.8; color:#f1f2f5;">
+          —
+        </p>
+      </div>
 
-    <small style="
-      display:block;
-      color:#9fb0c8;
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      font-size:.68rem;
-      margin-bottom:12px;
-    ">Resultado del diagnóstico</small>
+    </div>
 
-    <h2 style="
-      margin:0 0 14px;
-      font-family:Georgia,'Times New Roman',serif;
-      font-size:clamp(2.2rem,4vw,3.5rem);
-      line-height:.95;
-      letter-spacing:-.05em;
-    ">
-      Hemos detectado una <span style="color:#ff8a80;">posible vía de optimización</span> con recorrido real
+    <p style="margin:28px 0 0; color:#c7c9d1; line-height:1.8; max-width:760px;">
+      Esta evaluación es inicial y se basa en patrones habituales. El objetivo es identificar si existe recorrido real antes de plantear cualquier optimización.
+    </p>
+
+  </div>
+
+  </section>
+  <script>
+function ejecutarEvaluacion() {
+  const perfil = document.getElementById("perfil").value;
+  const situacion = document.getElementById("situacion").value;
+  const impacto = document.getElementById("impacto").value;
+  const urgencia = document.getElementById("urgencia").value;
+
+  if (!perfil || !situacion || !impacto || !urgencia) {
+    alert("Completa todos los campos para generar la evaluación inicial.");
+    return;
+  }
+
+  let encaje = "Medio";
+  let complejidad = "Media";
+  let prioridad = "Media";
+  let interpretacion = "La situación requiere revisión inicial para determinar si existe recorrido suficiente.";
+  let recomendacion = "Conviene validar el caso antes de tomar decisiones fiscales relevantes.";
+  let siguientePaso = "Solicitar una validación profesional para confirmar si existe margen real de revisión.";
+
+  if (perfil === "autonomo") {
+    encaje = "Alto";
+    complejidad = impacto === "muy-alto" ? "Alta" : "Media";
+    prioridad = urgencia === "alta" ? "Alta" : "Media";
+    interpretacion = "La combinación de actividad profesional, impacto económico y urgencia sugiere una revisión técnica estructurada.";
+    recomendacion = "Tiene sentido revisar estructura, criterio de tributación y posibles ineficiencias antes de continuar igual.";
+    siguientePaso = "Activar una validación profesional con foco en estructura, carga fiscal y recorrido de optimización.";
+  }
+
+  if (perfil === "empresa") {
+    encaje = "Alto";
+    complejidad = "Alta";
+    prioridad = (impacto === "alto" || impacto === "muy-alto" || urgencia === "alta") ? "Alta" : "Media";
+    interpretacion = "Las estructuras societarias con impacto relevante suelen requerir una revisión precisa antes de adoptar decisiones.";
+    recomendacion = "Conviene revisar la estructura y el encaje fiscal global antes de plantear movimientos relevantes.";
+    siguientePaso = "Solicitar validación profesional prioritaria para determinar riesgos, margen y siguiente vía adecuada.";
+  }
+
+  if (perfil === "inversor") {
+    encaje = "Alto";
+    complejidad = "Alta";
+    prioridad = (situacion === "cripto" || impacto === "muy-alto") ? "Alta" : "Media";
+    interpretacion = "La operativa patrimonial o en criptoactivos exige una lectura técnica para evitar decisiones ineficientes o inconsistentes.";
+    recomendacion = "Debe revisarse la posición fiscal antes de ejecutar movimientos, regularizar o reestructurar.";
+    siguientePaso = "Activar validación profesional para valorar exposición, eficiencia y recorrido real de actuación.";
+  }
+
+  if (perfil === "herencia") {
+    encaje = "Alto";
+    complejidad = "Alta";
+    prioridad = "Alta";
+    interpretacion = "Las herencias y transmisiones con elementos internacionales o patrimoniales requieren una revisión muy precisa.";
+    recomendacion = "Conviene validar residencia, jurisdicciones afectadas y coste fiscal potencial antes de actuar.";
+    siguientePaso = "Solicitar una validación sucesoria internacional para definir el mapa fiscal real del caso.";
+  }
+
+  if (perfil === "particular" && situacion === "internacional") {
+    encaje = "Alto";
+    complejidad = "Media";
+    prioridad = impacto === "muy-alto" ? "Alta" : "Media";
+    interpretacion = "La fiscalidad internacional en personas físicas puede generar exposición relevante si no se revisa a tiempo.";
+    recomendacion = "Conviene validar residencia, rentas y obligaciones en España antes de adoptar decisiones.";
+    siguientePaso = "Solicitar una validación inicial para confirmar si existe recorrido técnico suficiente.";
+  }
+
+  if (situacion === "sucesion") {
+    encaje = "Alto";
+    complejidad = "Alta";
+    prioridad = "Alta";
+    interpretacion = "La dimensión sucesoria introduce variables patrimoniales y jurisdiccionales que exigen precisión.";
+    recomendacion = "No conviene actuar sin revisar el impacto global, especialmente si hay bienes o personas en distintos países.";
+    siguientePaso = "Activar una revisión inicial específica sobre sucesión, transmisión y fiscalidad aplicable.";
+  }
+
+  if (situacion === "cripto") {
+    encaje = "Alto";
+    complejidad = "Alta";
+    prioridad = impacto === "muy-alto" ? "Alta" : prioridad;
+    interpretacion = "La fiscalidad de criptoactivos exige criterio técnico y una revisión estructurada del historial y la posición actual.";
+    recomendacion = "Conviene revisar antes de regularizar, compensar o reestructurar posiciones.";
+    siguientePaso = "Solicitar validación profesional con foco en operativa, riesgos y margen de actuación.";
+  }
+
+  if (impacto === "muy-alto") {
+    prioridad = "Alta";
+  }
+
+  document.getElementById("encajeValor").innerText = encaje;
+  document.getElementById("complejidadValor").innerText = complejidad;
+  document.getElementById("prioridadValor").innerText = prioridad;
+  document.getElementById("interpretacionTexto").innerText = interpretacion;
+  document.getElementById("recomendacionTexto").innerText = recomendacion;
+  document.getElementById("siguientePasoTexto").innerText = siguientePaso;
+
+  document.getElementById("resultadoCard").style.display = "block";
+  document.getElementById("resultado-panel").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+  </script>
+  <section class="container" style="padding-top:10px; padding-bottom:80px;" id="activacion-premium">
+
+  <div class="card" style="max-width:960px; background:var(--platinum);">
+
+    <p style="margin:0 0 10px; color:var(--slate); font-size:13px; letter-spacing:0.08em; text-transform:uppercase;">
+      Activación profesional
+    </p>
+
+    <h2 style="font-size:30px; line-height:1.2; margin-bottom:16px;">
+      Validación profesional de viabilidad fiscal real
     </h2>
 
-    <p style="
-      margin:0 0 22px;
-      color:#aeb8ca;
-      line-height:1.8;
-      max-width:720px;
-    ">
-      Tu perfil presenta señales compatibles con mejora fiscal potencial. Esta estimación es orientativa: el siguiente paso razonable es validar si existe recorrido real, complejidad asumible y prioridad de actuación.
+    <p style="max-width:760px; color:var(--charcoal); line-height:1.8; margin-bottom:28px;">
+      Si la situación presenta recorrido suficiente, el siguiente paso no es pedir información general, sino validar con precisión si existe margen real de revisión, riesgo relevante o necesidad de actuación prioritaria.
     </p>
 
-    <!-- RESULTADOS -->
-    <div style="
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:14px;
-      margin-bottom:24px;
-    ">
-      <div style="
-        border:1px solid rgba(255,255,255,.08);
-        border-radius:18px;
-        padding:16px;
-        background:rgba(255,255,255,.03);
-      ">
-        <small style="color:#8fa1bb;">Pérdida estimada</small>
-        <strong style="
-          display:block;
-          font-family:Georgia;
-          font-size:1.8rem;
-          margin-top:6px;
-        ">€12K – €38K</strong>
-        <span style="color:#9fb0c8;font-size:.9rem;">al año</span>
-      </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); margin-bottom:28px;">
 
-      <div style="
-        border:1px solid rgba(255,255,255,.08);
-        border-radius:18px;
-        padding:16px;
-        background:rgba(255,255,255,.03);
-      ">
-        <small style="color:#8fa1bb;">Complejidad</small>
-        <strong style="
-          display:block;
-          font-family:Georgia;
-          font-size:1.8rem;
-          margin-top:6px;
-        ">Media-alta</strong>
-        <span style="color:#9fb0c8;font-size:.9rem;">requiere criterio experto</span>
-      </div>
-
-      <div style="
-        border:1px solid rgba(255,255,255,.08);
-        border-radius:18px;
-        padding:16px;
-        background:rgba(255,255,255,.03);
-      ">
-        <small style="color:#8fa1bb;">Prioridad</small>
-        <strong style="
-          display:block;
-          font-family:Georgia;
-          font-size:1.8rem;
-          margin-top:6px;
-          color:#ff8a80;
-        ">Alta</strong>
-        <span style="color:#9fb0c8;font-size:.9rem;">acción recomendada</span>
-      </div>
-    </div>
-
-    <!-- TEXTO CLAVE -->
-    <p style="
-      margin:0 0 26px;
-      color:#d2dae7;
-      font-size:1rem;
-      line-height:1.9;
-      max-width:740px;
-    ">
-      No actuar mantiene una pérdida constante en el tiempo.  
-      Actuar ahora permite convertir esa fricción en ahorro, orden y control fiscal real.
-    </p>
-
-    <!-- DOBLE DECISIÓN -->
-    <div style="
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:16px;
-    ">
-
-      <!-- PAGAR -->
-      <div style="
-        border:1px solid rgba(255,255,255,.08);
-        border-radius:22px;
-        padding:20px;
-        background:rgba(255,255,255,.03);
-      ">
-        <small style="color:#9fb0c8;">Activación directa</small>
-        <h3 style="
-          margin:8px 0 10px;
-          font-family:Georgia;
-          font-size:1.6rem;
-        ">Activar diagnóstico premium</h3>
-
-        <p style="color:#aeb8ca;font-size:.95rem;line-height:1.7;">
-          Acceso inmediato, revisión prioritaria y hoja de ruta inicial en menos de 24h.
+      <div class="card" style="background:white;">
+        <p style="margin:0 0 8px; color:var(--slate); font-size:13px; letter-spacing:0.08em; text-transform:uppercase;">
+          Validación estándar
         </p>
-
-       <a href="#" onclick="activarDiagnostico(event)" style="
-display:inline-flex;
-margin-top:12px;
-min-height:50px;
-padding:0 18px;
-align-items:center;
-justify-content:center;
-border-radius:14px;
-background:linear-gradient(135deg,#3eee6f,#fff8ef);
-color:#08111d;
-font-weight:800;
-text-decoration:none;
-">
-Activar ahora
-       </a>
+        <h3 style="margin:0 0 12px; font-size:26px; font-family:'JetBrains Mono', monospace;">€ 49</h3>
+        <p style="margin:0 0 14px; color:var(--slate); line-height:1.7;">
+          Revisión inicial de encaje, complejidad y posible recorrido antes de plantear una intervención más profunda.
+        </p>
+        <ul style="margin:0 0 22px; padding-left:18px; color:var(--charcoal); line-height:1.8;">
+          <li>Evaluación individual del caso</li>
+          <li>Detección de margen o riesgo</li>
+          <li>Orientación clara sobre siguiente paso</li>
+        </ul>
+        <button class="btn-primary" onclick="activarWhatsApp('estandar')">
+          Solicitar validación estándar
+        </button>
       </div>
 
-      <!-- WHATSAPP -->
-      <div style="
-        border:1px solid rgba(255,255,255,.08);
-        border-radius:22px;
-        padding:20px;
-        background:rgba(255,255,255,.03);
-      ">
-        <small style="color:#9fb0c8;">Revisión previa</small>
-        <h3 style="
-          margin:8px 0 10px;
-          font-family:Georgia;
-          font-size:1.6rem;
-        ">Hablar con experta antes</h3>
-
-        <p style="color:#aeb8ca;font-size:.95rem;line-height:1.7;">
-          Evaluamos tu caso antes de activar y confirmamos si existe optimización real.
+      <div class="card" style="background:var(--midnight); color:var(--white); border:1px solid rgba(255,255,255,0.08);">
+        <p style="margin:0 0 8px; color:#d7d9df; font-size:13px; letter-spacing:0.08em; text-transform:uppercase;">
+          Revisión prioritaria
         </p>
-
-        <a href="https://wa.me/34685870983?text=Hola%20Sonia,%20he%20completado%20el%20diagnóstico.%20Quiero%20revisión%20previa."
-           style="
-          display:inline-flex;
-          margin-top:12px;
-          min-height:50px;
-          padding:0 18px;
-          align-items:center;
-          justify-content:center;
-          border-radius:14px;
-          background:rgba(255,255,255,.06);
-          border:1px solid rgba(255,255,255,.1);
-          color:#fff;
-          font-weight:700;
-          text-decoration:none;
-        ">
-          Contactar por WhatsApp
-        </a>
+        <h3 style="margin:0 0 12px; font-size:26px; font-family:'JetBrains Mono', monospace; color:#E5D4A1;">€ 99</h3>
+        <p style="margin:0 0 14px; color:#d7d9df; line-height:1.7;">
+          Pensada para situaciones con impacto económico relevante, mayor urgencia o necesidad de claridad en menos tiempo.
+        </p>
+        <ul style="margin:0 0 22px; padding-left:18px; color:var(--white); line-height:1.8;">
+          <li>Tratamiento preferente del caso</li>
+          <li>Mayor prioridad de revisión</li>
+          <li>Orientación inicial enfocada a decisión</li>
+        </ul>
+        <button class="btn-primary" style="background:transparent;" onclick="activarWhatsApp('prioritaria')">
+          Activar revisión prioritaria
+        </button>
       </div>
 
     </div>
 
+    <p style="margin:0; color:var(--slate); line-height:1.8; max-width:760px;">
+      Si tras la validación se concluye que no existe recorrido relevante, se indicará con claridad. No todas las situaciones requieren avanzar.
+    </p>
 
-    
+  </div>
 
-    
-<!-- BLOQUE FINAL TOP 3 -->
+  </section>
+  <script>
+function activarWhatsApp(tipoServicio) {
+  const perfil = document.getElementById("perfil").value || "no definido";
+  const situacion = document.getElementById("situacion").value || "no definida";
+  const impacto = document.getElementById("impacto").value || "no definido";
+  const urgencia = document.getElementById("urgencia").value || "no definida";
 
-<section style="padding:60px 0 20px;">
+  const encaje = document.getElementById("encajeValor").innerText || "no evaluado";
+  const complejidad = document.getElementById("complejidadValor").innerText || "no evaluada";
+  const prioridad = document.getElementById("prioridadValor").innerText || "no evaluada";
 
-  <!-- MENSAJE DE CIERRE -->
-  <div id="estado-ia-final" style="
-  display:inline-flex;
+  const nombresPerfil = {
+    particular: "Particular con patrimonio o complejidad fiscal",
+    autonomo: "Gran autónomo / profesional",
+    empresa: "Sociedad / estructura empresarial",
+    inversor: "Inversor / patrimonio / cripto",
+    herencia: "Herencia / sucesión internacional"
+  };
+
+  const nombresSituacion = {
+    internacional: "Residencia, no residencia o doble imposición",
+    estructura: "Estructura societaria o eficiencia fiscal",
+    patrimonio: "Patrimonio relevante y optimización",
+    cripto: "Operativa en criptoactivos",
+    sucesion: "Herencia, donación o transmisión patrimonial"
+  };
+
+  const nombresImpacto = {
+    medio: "Relevante",
+    alto: "Alto",
+    "muy-alto": "Muy alto"
+  };
+
+  const nombresUrgencia = {
+    baja: "Sin urgencia inmediata",
+    media: "Conviene revisar pronto",
+    alta: "Debe revisarse cuanto antes"
+  };
+
+  let intro = "Hola. Quiero solicitar una validación profesional de mi caso.";
+  if (tipoServicio === "prioritaria") {
+    intro = "Hola. Quiero activar una revisión prioritaria de mi caso.";
+  }
+
+  const mensaje = `${intro}
+
+Perfil: ${nombresPerfil[perfil] || perfil}
+Situación principal: ${nombresSituacion[situacion] || situacion}
+Impacto económico percibido: ${nombresImpacto[impacto] || impacto}
+Urgencia: ${nombresUrgencia[urgencia] || urgencia}
+
+Resultado inicial:
+- Encaje con revisión: ${encaje}
+- Complejidad estimada: ${complejidad}
+- Prioridad sugerida: ${prioridad}
+
+Quiero que reviséis si existe recorrido real y cuál sería el siguiente paso adecuado.`;
+
+  const url = "https://wa.me/34685870983?text=" + encodeURIComponent(mensaje);
+  window.open(url, "_blank");
+}
+  </script>
+  <div id="chatbot-bubble" onclick="abrirChatbot()" style="
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  background:var(--midnight);
+  color:var(--white);
+  display:flex;
   align-items:center;
-  gap:8px;
-  margin-bottom:18px;
-  padding:8px 12px;
-  border-radius:999px;
-  background:rgba(56,210,122,.08);
-  border:1px solid rgba(56,210,122,.18);
-  color:#cfead8;
-  font-size:.82rem;
-  letter-spacing:.08em;
-  text-transform:uppercase;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:0 10px 30px rgba(10,22,40,0.18);
+  z-index:9999;
+  font-size:14px;
+  font-weight:600;
 ">
-  <span style="
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    background:#38d27a;
-    display:inline-block;
-    box-shadow:0 0 0 6px rgba(56,210,122,.14);
-  "></span>
-  Sistema evaluando encaje
-  </div>
+  Chat
+</div>
+
+<div id="chatbot-panel" style="
+  display:none;
+  position:fixed;
+  right:24px;
+  bottom:100px;
+  width:360px;
+  max-width:calc(100vw - 32px);
+  background:white;
+  border:1px solid var(--border);
+  border-radius:12px;
+  box-shadow:0 16px 40px rgba(10,22,40,0.16);
+  z-index:9999;
+  overflow:hidden;
+">
+
   <div style="
-    margin-bottom:28px;
-    max-width:720px;
-    line-height:1.7;
-    color:#d6e2ea;
-    font-size:1.05rem;
+    background:var(--midnight);
+    color:var(--white);
+    padding:16px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
   ">
-    No todos los casos requieren optimización avanzada.  
-    Este sistema analiza primero si existe margen real antes de activar cualquier intervención.
-
-    <br><br>
-
-    Seguir sin actuar mantiene una pérdida constante en el tiempo.  
-    Activar ahora permite transformar esa fricción en ahorro, orden y control fiscal real.
+    <div>
+      <div style="font-size:13px; letter-spacing:0.08em; text-transform:uppercase; opacity:0.8;">
+        Evaluación asistida
+      </div>
+      <div style="font-size:16px; font-weight:600; margin-top:4px;">
+        Consulta guiada
+      </div>
+    </div>
+    <button onclick="cerrarChatbot()" style="
+      background:none;
+      border:none;
+      color:white;
+      font-size:18px;
+      cursor:pointer;
+    ">×</button>
   </div>
 
-  <!-- BLOQUE DECISIÓN -->
-  <div style="
-    display:grid;
-    grid-template-columns:1fr;
-    gap:16px;
-    max-width:520px;
+  <div id="chatbot-messages" style="
+    padding:18px;
+    max-height:360px;
+    overflow-y:auto;
+    background:var(--white);
   ">
+    <div style="
+      background:var(--platinum);
+      border-radius:10px;
+      padding:12px 14px;
+      color:var(--charcoal);
+      line-height:1.6;
+      margin-bottom:12px;
+    ">
+      ¿Estás revisando tu situación fiscal o la de tu empresa?
+    </div>
+  </div>
 
-    <!-- BOTÓN PRINCIPAL -->
-    <a href="#" onclick="activarDiagnostico(event)"
-      style="
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        min-height:56px;
-        padding:0 22px;
-        border-radius:14px;
-        background:linear-gradient(135deg,#6ee7ff,#8b5cf6);
-        color:#08111d;
-        font-weight:800;
-        text-decoration:none;
-        font-size:1rem;
-      "
-    >
-      Verificar si mi caso tiene optimización real
-    </a>
+  <div id="chatbot-actions" style="
+    padding:16px 18px 18px;
+    border-top:1px solid var(--border);
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  ">
+    <button onclick="respuestaChat('situacion_personal')" class="btn-primary" style="padding:10px 16px;">
+      Mi situación
+    </button>
+    <button onclick="respuestaChat('situacion_empresa')" class="btn-primary" style="padding:10px 16px;">
+      Mi empresa
+    </button>
+  </div>
 
-    <!-- BOTÓN SECUNDARIO -->
-    <a href="https://wa.me/34685870983?text=Hola%20Sonia,%20quiero%20una%20revisión%20previa%20antes%20de%20activar"
-      style="
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        min-height:52px;
-        padding:0 20px;
-        border-radius:14px;
-        background:rgba(255,255,255,.05);
-        border:1px solid rgba(255,255,255,.1);
-        color:#fff;
-        font-weight:600;
-        text-decoration:none;
-      "
-    >
-      Prefiero revisión antes de decidir
-    </a>
+</div>
+<script>
+let chatbotState = {
+  tipo: "",
+  preocupacion: "",
+  email: "",
+  score: 0
+};
+
+function abrirChatbot() {
+  document.getElementById("chatbot-panel").style.display = "block";
+}
+
+function cerrarChatbot() {
+  document.getElementById("chatbot-panel").style.display = "none";
+}
+
+function addBotMessage(texto) {
+  const box = document.getElementById("chatbot-messages");
+  const div = document.createElement("div");
+  div.style.background = "var(--platinum)";
+  div.style.borderRadius = "10px";
+  div.style.padding = "12px 14px";
+  div.style.color = "var(--charcoal)";
+  div.style.lineHeight = "1.6";
+  div.style.marginBottom = "12px";
+  div.innerText = texto;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function addUserMessage(texto) {
+  const box = document.getElementById("chatbot-messages");
+  const div = document.createElement("div");
+  div.style.background = "var(--midnight)";
+  div.style.borderRadius = "10px";
+  div.style.padding = "12px 14px";
+  div.style.color = "var(--white)";
+  div.style.lineHeight = "1.6";
+  div.style.marginBottom = "12px";
+  div.style.marginLeft = "28px";
+  div.innerText = texto;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function setChatbotActions(html) {
+  document.getElementById("chatbot-actions").innerHTML = html;
+}
+
+function respuestaChat(valor) {
+  if (valor === "situacion_personal") {
+    chatbotState.tipo = "personal";
+    chatbotState.score += 5;
+    addUserMessage("Mi situación");
+    addBotMessage("Para orientarte mejor, ¿eres gran autónomo, inversor/patrimonio o estás revisando una herencia?");
+    setChatbotActions(`
+      <button onclick="respuestaChat('autonomo')" class="btn-primary" style="padding:10px 16px;">Gran autónomo</button>
+      <button onclick="respuestaChat('inversor')" class="btn-primary" style="padding:10px 16px;">Inversor / patrimonio</button>
+      <button onclick="respuestaChat('herencia')" class="btn-primary" style="padding:10px 16px;">Herencia</button>
+    `);
+    return;
+  }
+
+  if (valor === "situacion_empresa") {
+    chatbotState.tipo = "empresa";
+    chatbotState.score += 5;
+    addUserMessage("Mi empresa");
+    addBotMessage("¿Qué te preocupa ahora mismo?");
+    setChatbotActions(`
+      <button onclick="respuestaChat('estructura')" class="btn-primary" style="padding:10px 16px;">Estructura fiscal</button>
+      <button onclick="respuestaChat('internacional')" class="btn-primary" style="padding:10px 16px;">Operativa internacional</button>
+      <button onclick="respuestaChat('riesgo')" class="btn-primary" style="padding:10px 16px;">Riesgo / revisión</button>
+    `);
+    return;
+  }
+
+  if (["autonomo", "inversor", "herencia", "estructura", "internacional", "riesgo"].includes(valor)) {
+    chatbotState.preocupacion = valor;
+    chatbotState.score += 10;
+
+    const labels = {
+      autonomo: "Gran autónomo",
+      inversor: "Inversor / patrimonio",
+      herencia: "Herencia",
+      estructura: "Estructura fiscal",
+      internacional: "Operativa internacional",
+      riesgo: "Riesgo / revisión"
+    };
+
+    addUserMessage(labels[valor]);
+
+    addBotMessage("Si quieres, te envío una orientación inicial y el siguiente paso adecuado. Déjame tu email.");
+    setChatbotActions(`
+      <input id="chatbot-email" type="email" placeholder="Tu email" style="width:100%; padding:12px 14px; border:1px solid var(--border); border-radius:6px; box-sizing:border-box;">
+      <button onclick="guardarEmailChat()" class="btn-primary" style="padding:10px 16px;">Enviar</button>
+    `);
+    return;
+  }
+}
+
+function guardarEmailChat() {
+  const email = document.getElementById("chatbot-email").value.trim();
+
+  if (!email || !email.includes("@")) {
+    alert("Introduce un email válido.");
+    return;
+  }
+
+  chatbotState.email = email;
+  chatbotState.score += 10;
+
+  addUserMessage(email);
+  addBotMessage("Perfecto. He registrado tu email. Si la situación requiere revisión más profunda, el siguiente paso razonable es una validación profesional o una cita guiada.");
+
+  localStorage.setItem("chatbotLead", JSON.stringify(chatbotState));
+
+  setChatbotActions(`
+    <button onclick="activarWhatsApp('estandar')" class="btn-primary" style="padding:10px 16px;">Validación profesional</button>
+    <button onclick="abrirAgenda()" class="btn-primary" style="padding:10px 16px;">Agendar cita</button>
+  `);
+
+  if (chatbotState.score >= 15) {
+    console.log("Lead caliente detectado:", chatbotState);
+  }
+}
+
+function abrirAgenda() {
+  window.open("https://cal.com/", "_blank");
+}
+</script>
+<script>
+let idiomaActual = "es";
+
+const translations = {
+  es: {
+    heroTitle: "Fiscalidad internacional, patrimonio y estructuras complejas.",
+    heroText: "No es asesoramiento estándar. Analizamos situaciones reales con impacto fiscal relevante en España y entorno internacional.",
+    cta: "Evaluar mi situación"
+  },
+  en: {
+    heroTitle: "International tax, wealth and complex structures.",
+    heroText: "This is not standard advisory. We analyse real situations with significant tax impact in Spain and internationally.",
+    cta: "Evaluate my situation"
+  }
+};
+
+function cambiarIdioma(lang) {
+  idiomaActual = lang;
+
+  document.getElementById("hero-title").innerText = translations[lang].heroTitle;
+  document.getElementById("hero-text").innerText = translations[lang].heroText;
+  document.getElementById("hero-cta").innerText = translations[lang].cta;
+
+  localStorage.setItem("idioma", lang);
+}
+
+window.onload = function () {
+  const guardado = localStorage.getItem("idioma");
+  if (guardado && translations[guardado]) {
+    cambiarIdioma(guardado);
+  }
+};
+</script>
+<div style="position:fixed; top:16px; right:20px; z-index:9999;">
+  <select onchange="cambiarIdioma(this.value)" style="
+    padding:6px 10px;
+    border-radius:6px;
+    border:1px solid var(--border);
+    background:white;
+  ">
+    <option value="es">ES</option>
+    <option value="en">EN</option>
+  </select>
+</div>
+<section class="container" style="padding-top:20px; padding-bottom:80px;" id="simulador-ia">
+
+  <h2 style="font-size:30px; margin-bottom:16px;">
+    Simulador de ahorro fiscal
+  </h2>
+
+  <p style="max-width:760px; color:var(--slate); margin-bottom:32px; line-height:1.7;">
+    Introduce una descripción breve de tu situación. El simulador genera una estimación inicial orientativa y no sustituye una validación profesional.
+  </p>
+
+  <div class="card" style="max-width:920px;">
+
+    <label for="simuladorInput" style="display:block; margin-bottom:10px; font-weight:600;">
+      Describe tu caso
+    </label>
+
+    <textarea id="simuladorInput" rows="6" style="
+      width:100%;
+      box-sizing:border-box;
+      padding:16px;
+      border:1px solid var(--border);
+      border-radius:8px;
+      font-family:'Inter', sans-serif;
+      font-size:15px;
+      line-height:1.7;
+      resize:vertical;
+      margin-bottom:20px;
+    " placeholder="Ejemplo: Soy autónomo, ingresos 60.000 €, gastos 20.000 €, actualmente tributo en módulos."></textarea>
+
+    <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
+      <button class="btn-primary" onclick="ejecutarSimuladorIA()">
+        Ejecutar simulación inicial
+      </button>
+
+      <span style="font-size:13px; color:var(--slate);">
+        Preparado para modo demo y conexión posterior con OpenAI.
+      </span>
+    </div>
+
+    <div id="simuladorResultado" style="
+      display:none;
+      margin-top:28px;
+      padding:22px;
+      border:1px solid var(--border);
+      border-radius:8px;
+      background:var(--platinum);
+    ">
+
+      <p style="margin:0 0 8px; color:var(--slate); font-size:13px; letter-spacing:0.08em; text-transform:uppercase;">
+        Resultado inicial
+      </p>
+
+      <h3 style="margin:0 0 16px; font-size:28px; font-family:'JetBrains Mono', monospace;">
+        <span id="ahorroEstimado">—</span>
+      </h3>
+
+      <p id="recomendacionCorta" style="margin:0 0 22px; color:var(--charcoal); line-height:1.7;">
+        —
+      </p>
+
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <button class="btn-primary" onclick="activarLlamadaAsesor()">
+          Quiero que me llame un asesor
+        </button>
+      </div>
+
+      <div id="capturaLeadSimulador" style="display:none; margin-top:22px;">
+        <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+
+          <input id="leadEmail" type="email" placeholder="Tu email" style="
+            width:100%;
+            box-sizing:border-box;
+            padding:14px;
+            border:1px solid var(--border);
+            border-radius:8px;
+            font-family:'Inter', sans-serif;
+          ">
+
+          <input id="leadPhone" type="tel" placeholder="Tu teléfono" style="
+            width:100%;
+            box-sizing:border-box;
+            padding:14px;
+            border:1px solid var(--border);
+            border-radius:8px;
+            font-family:'Inter', sans-serif;
+          ">
+
+        </div>
+
+        <div style="margin-top:16px;">
+          <button class="btn-primary" onclick="guardarLeadSimulador()">
+            Enviar datos para llamada
+          </button>
+        </div>
+      </div>
+
+    </div>
 
   </div>
 
 </section>
-    <section id="diagnostico-pro" style="display:none; padding:40px 20px; background:#f9fafb; border-top:1px solid #e5e7eb;">
-  <section id="diagnostico-pro" style="display:none; padding:36px 0 10px;">
-  <div class="wrap">
-    <div style="
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:28px;
-      padding:28px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)),
-        linear-gradient(180deg, #0a1528 0%, #091220 100%);
-      box-shadow:0 24px 70px rgba(0,0,0,.34);
-    ">
-      
-      <div id="estado-ia-final" style="
-        display:inline-flex;
-        align-items:center;
-        gap:8px;
-        margin-bottom:18px;
-        padding:8px 12px;
-        border-radius:999px;
-        background:rgba(56,210,122,.08);
-        border:1px solid rgba(56,210,122,.18);
-        color:#cfead8;
-        font-size:.82rem;
-        letter-spacing:.08em;
-        text-transform:uppercase;
-      ">
-        <span style="
-          width:8px;
-          height:8px;
-          border-radius:50%;
-          background:#38d27a;
-          display:inline-block;
-          box-shadow:0 0 6px rgba(56,210,122,.45);
-        "></span>
-        Sistema evaluando encaje
-      </div>
+<script>
+const SIMULADOR_MODO_DEMO = true;
 
-      <small style="
-        display:block;
-        color:#9fb0c8;
-        text-transform:uppercase;
-        letter-spacing:.14em;
-        font-size:.68rem;
-        margin-bottom:12px;
-      ">Validación ejecutiva</small>
+function ejecutarSimuladorIA() {
+  const input = document.getElementById("simuladorInput").value.trim();
 
-      <h2 id="titulo-resultado" style="
-        margin:0 0 14px;
-        font-family:Georgia, 'Times New Roman', serif;
-        font-size:clamp(2rem,4vw,3rem);
-        line-height:.95;
-        letter-spacing:-.05em;
-      ">
-        Hemos detectado una posible vía de optimización con recorrido real
-      </h2>
+  if (!input) {
+    alert("Describe tu situación para generar la simulación inicial.");
+    return;
+  }
 
-      <p style="
-        margin:0 0 24px;
-        color:#aeb8ca;
-        line-height:1.8;
-        max-width:720px;
-      ">
-        Tu perfil presenta señales compatibles con mejora fiscal potencial. Esta estimación es orientativa: el siguiente paso razonable es validar si existe recorrido real, complejidad asumible y prioridad de actuación.
+  const resultado = document.getElementById("simuladorResultado");
+  const ahorro = document.getElementById("ahorroEstimado");
+  const recomendacion = document.getElementById("recomendacionCorta");
+
+  resultado.style.display = "block";
+
+  if (SIMULADOR_MODO_DEMO) {
+    ahorro.innerText = "€ 4.800 / año";
+    recomendacion.innerText = "Puede existir margen relevante de revisión. Conviene validar el caso antes de mantener la estructura actual.";
+    resultado.scrollIntoView({ behavior: "smooth" });
+    return;
+  }
+
+  ahorro.innerText = "Procesando…";
+  recomendacion.innerText = "Preparando estimación inicial…";
+  resultado.scrollIntoView({ behavior: "smooth" });
+
+  // Aquí se conectará después la llamada real a la API.
+}
+
+function activarLlamadaAsesor() {
+  document.getElementById("capturaLeadSimulador").style.display = "block";
+}
+
+function guardarLeadSimulador() {
+  const email = document.getElementById("leadEmail").value.trim();
+  const phone = document.getElementById("leadPhone").value.trim();
+  const texto = document.getElementById("simuladorInput").value.trim();
+  const ahorro = document.getElementById("ahorroEstimado").innerText.trim();
+  const recomendacion = document.getElementById("recomendacionCorta").innerText.trim();
+
+  if (!email || !phone) {
+    alert("Introduce email y teléfono para continuar.");
+    return;
+  }
+
+  const lead = {
+    origen: "simulador_ia",
+    email,
+    telefono: phone,
+    caso: texto,
+    ahorro_estimado: ahorro,
+    recomendacion_corta: recomendacion,
+    fecha: new Date().toISOString()
+  };
+
+  localStorage.setItem("leadSimuladorIA", JSON.stringify(lead));
+
+  const mensaje = `Hola. Quiero que me llame un asesor.
+
+Origen: Simulador IA
+Email: ${email}
+Teléfono: ${phone}
+Caso: ${texto}
+Resultado inicial: ${ahorro}
+Recomendación: ${recomendacion}`;
+
+  const url = "https://wa.me/34685870983?text=" + encodeURIComponent(mensaje);
+  window.open(url, "_blank");
+}
+</script>
+<script>
+let leadScore = 0;
+let ultimaPagina = window.location.pathname || "/";
+
+function sumarScore(puntos, motivo) {
+  leadScore += puntos;
+
+  const historial = JSON.parse(localStorage.getItem("leadScoreHistorial") || "[]");
+  historial.push({
+    motivo,
+    puntos,
+    total: leadScore,
+    pagina: ultimaPagina,
+    fecha: new Date().toISOString()
+  });
+
+  localStorage.setItem("leadScoreTotal", String(leadScore));
+  localStorage.setItem("leadScoreHistorial", JSON.stringify(historial));
+
+  if (leadScore >= 15) {
+    console.log(`Lead caliente: ${leadScore} puntos · Página: ${ultimaPagina}`);
+  }
+}
+
+function inicializarLeadScore() {
+  const guardado = localStorage.getItem("leadScoreTotal");
+  if (guardado) {
+    leadScore = parseInt(guardado, 10) || 0;
+  }
+
+  if (window.location.pathname.includes("precios")) {
+    sumarScore(5, "Visita /precios");
+  }
+
+  if (window.location.pathname.includes("preguntas-frecuentes")) {
+    setTimeout(() => {
+      sumarScore(3, "Más de 3 minutos en /preguntas-frecuentes");
+    }, 180000);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", inicializarLeadScore);
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const botonesPrimarios = document.querySelectorAll(".btn-primary");
+
+  botonesPrimarios.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      sumarScore(2, "Click en CTA principal");
+    });
+  });
+});
+
+function registrarDescargaLeadMagnet(nombre) {
+  sumarScore(10, `Descarga lead magnet: ${nombre}`);
+}
+
+function registrarFraseCaliente(texto) {
+  const textoNormalizado = texto.toLowerCase();
+
+  if (
+    textoNormalizado.includes("iva") ||
+    textoNormalizado.includes("liquidación") ||
+    textoNormalizado.includes("inspección") ||
+    textoNormalizado.includes("doble imposición") ||
+    textoNormalizado.includes("intracomunitario")
+  ) {
+    sumarScore(20, `Frase caliente detectada: ${texto}`);
+  }
+}
+</script>
+<script>
+function guardarLeadCRM(data) {
+  const leads = JSON.parse(localStorage.getItem("crmLeads") || "[]");
+
+  leads.push({
+    ...data,
+    score: leadScore,
+    pagina: ultimaPagina,
+    fecha: new Date().toISOString(),
+    estado: "nuevo"
+  });
+
+  localStorage.setItem("crmLeads", JSON.stringify(leads));
+}
+
+function verLeadsGuardados() {
+  return JSON.parse(localStorage.getItem("crmLeads") || "[]");
+}
+</script>
+<script>
+const guardarEmailChatOriginal = guardarEmailChat;
+guardarEmailChat = function () {
+  const emailAntes = document.getElementById("chatbot-email").value.trim();
+  guardarEmailChatOriginal();
+
+  if (emailAntes && emailAntes.includes("@")) {
+    guardarLeadCRM({
+      origen: "chatbot",
+      email: emailAntes,
+      perfil: chatbotState.tipo || "",
+      intencion: chatbotState.preocupacion || "",
+      telefono: "",
+      detalle: "Lead captado desde chatbot"
+    });
+  }
+};
+
+const guardarLeadSimuladorOriginal = guardarLeadSimulador;
+guardarLeadSimulador = function () {
+  const email = document.getElementById("leadEmail").value.trim();
+  const phone = document.getElementById("leadPhone").value.trim();
+  const caso = document.getElementById("simuladorInput").value.trim();
+
+  guardarLeadSimuladorOriginal();
+
+  if (email && phone) {
+    guardarLeadCRM({
+      origen: "simulador_ia",
+      email,
+      telefono: phone,
+      perfil: "",
+      intencion: "simulador",
+      detalle: caso
+    });
+  }
+};
+</script>
+<section class="container" style="padding-top:20px; padding-bottom:80px;" id="novedades-fiscales">
+
+  <h2 style="font-size:30px; margin-bottom:16px;">
+    Novedades fiscales relevantes
+  </h2>
+
+  <p style="max-width:760px; color:var(--slate); margin-bottom:32px; line-height:1.7;">
+    Selección de novedades, criterios y alertas con impacto potencial en estructuras, patrimonio, herencias, inversión y fiscalidad internacional.
+  </p>
+
+  <div class="grid" id="novedadesGrid" style="grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));">
+
+    <div class="card">
+      <p style="margin:0 0 10px; color:var(--slate); font-size:13px; letter-spacing:0.08em; text-transform:uppercase;">
+        Radar fiscal
       </p>
-
-      <div style="
-        display:grid;
-        grid-template-columns:repeat(3,1fr);
-        gap:14px;
-        margin-bottom:24px;
-      ">
-        <div style="
-          border:1px solid rgba(255,255,255,.08);
-          border-radius:18px;
-          padding:16px;
-          background:rgba(255,255,255,.03);
-        ">
-          <small style="color:#8fa1bb;">Encaje</small>
-          <strong id="encaje" style="
-            display:block;
-            font-family:Georgia;
-            font-size:1.35rem;
-            margin-top:6px;
-          ">Encaje con revisión: alto</strong>
-        </div>
-
-        <div style="
-          border:1px solid rgba(255,255,255,.08);
-          border-radius:18px;
-          padding:16px;
-          background:rgba(255,255,255,.03);
-        ">
-          <small style="color:#8fa1bb;">Complejidad</small>
-          <strong id="complejidad" style="
-            display:block;
-            font-family:Georgia;
-            font-size:1.35rem;
-            margin-top:6px;
-          ">Complejidad estimada: media</strong>
-        </div>
-
-        <div style="
-          border:1px solid rgba(255,255,255,.08);
-          border-radius:18px;
-          padding:16px;
-          background:rgba(255,255,255,.03);
-        ">
-          <small style="color:#8fa1bb;">Prioridad</small>
-          <strong id="prioridad" style="
-            display:block;
-            font-family:Georgia;
-            font-size:1.35rem;
-            margin-top:6px;
-            color:#ff8a80;
-          ">Prioridad recomendada: alta</strong>
-        </div>
-      </div>
-
-      <div style="
-        margin-bottom:22px;
-        padding:18px;
-        background:rgba(255,255,255,.03);
-        border:1px solid rgba(255,255,255,.08);
-        border-radius:18px;
-      ">
-        <div style="
-          font-size:12px;
-          letter-spacing:.12em;
-          text-transform:uppercase;
-          color:#9fb0c8;
-          margin-bottom:8px;
-        ">
-          Recomendación del sistema
-        </div>
-
-        <div id="texto-recomendacion" style="
-          font-weight:700;
-          margin-bottom:8px;
-          color:#ffffff;
-        "></div>
-
-        <div id="texto-siguiente-paso" style="
-          color:#cfd8e6;
-          line-height:1.75;
-        "></div>
-      </div>
-
-      <p style="
-        margin:0 0 20px;
-        color:#cfe3ff;
-        line-height:1.8;
-        max-width:740px;
-      ">
-        Si existe recorrido real, se te indicará con claridad. Si no existe, también.
+      <h3 style="margin-top:0;">Cargando novedades relevantes…</h3>
+      <p style="color:var(--slate); line-height:1.7;">
+        Este bloque quedará preparado para recibir borradores generados por el sistema DataLLM y validados antes de su publicación.
       </p>
-
-      <div style="
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:16px;
-        max-width:520px;
-      ">
-        <a href="#"
-           onclick="activarDiagnostico(event)"
-           style="
-             display:flex;
-             align-items:center;
-             justify-content:center;
-             min-height:56px;
-             padding:0 22px;
-             border-radius:14px;
-             background:linear-gradient(135deg,#6ee7ff,#8b5cf6);
-             color:#08111d;
-             font-weight:800;
-             text-decoration:none;
-             font-size:1rem;
-           ">
-          Validar si existe recorrido real en mi caso
-        </a>
-
-        <a href="https://wa.me/34685870983?text=Hola%20Sonia,%20quiero%20una%20revisi%C3%B3n%20previa%20antes%20de%20activar"
-           style="
-             display:flex;
-             align-items:center;
-             justify-content:center;
-             min-height:52px;
-             padding:0 20px;
-             border-radius:14px;
-             background:rgba(255,255,255,.05);
-             border:1px solid rgba(255,255,255,.1);
-             color:#fff;
-             font-weight:600;
-             text-decoration:none;
-           ">
-          Quiero revisión previa antes de activar
-        </a>
-      </div>
-
-    </div>
-  </div>
-  </section>
-
-    <p style="font-weight:bold;">
-      En tu caso, lo razonable es validar si existe recorrido real antes de descartarlo.
-    </p>
-
-  </div>
-    </section>
-    <footer style="padding:34px 0 54px;">
-  <div class="wrap footer-card">
-    <div>
-      <div class="brand" style="margin-bottom:12px;">
-        <span class="brand-mark"></span>
-        <span>LexFiscalIA</span>
-      </div>
-
-      <div style="color:var(--muted); line-height:1.6; max-width:60ch;">
-        Optimización fiscal premium, filtro de casos con valor real y activación estratégica para clientes que buscan claridad, control y resultado.
-      </div>
     </div>
 
-    <div style="display:grid; gap:10px; justify-items:start;">
-      <a href="#top">Volver arriba</a>
-      <a href="#sistema">Sistema</a>
-      <a href="#ventajas">Ventajas</a>
-      <a href="#inversion">Activación</a>
-    </div>
   </div>
-    </footer>
-    <script>
-function activarDiagnostico(e) {
-  e.preventDefault();
 
-  const boton = e.currentTarget;
-
-  if (boton.disabled) return;
-boton.disabled = true;
-  boton.innerText = "Analizando tu caso...";
-  boton.style.opacity = "0.7";
-
-  const estados = [
-  "Analizando estructura fiscal…",
-  "Cruzando variables clave…",
-  "Detectando ineficiencias ocultas…",
-  "Estimando impacto económico…",
-  "Validando recorrido real…",
-  "Preparando recomendación estratégica…"
+</section>
+<script>
+const borradoresNovedades = [
+  {
+    titulo: "Cambio de criterio con posible impacto en no residentes",
+    impacto: "Puede afectar a estructuras con renta o patrimonio vinculado a España.",
+    afecta: "No residentes, patrimonios internacionales y titulares con activos en España.",
+    accion: "Conviene revisar estructura, residencia y obligación declarativa antes de actuar.",
+    estado: "pendiente"
+  },
+  {
+    titulo: "Nueva revisión relevante en transmisión patrimonial y sucesión",
+    impacto: "Puede alterar el coste fiscal efectivo en herencias con componente internacional.",
+    afecta: "Herederos, donatarios y familias con bienes en varias jurisdicciones.",
+    accion: "Debe revisarse el mapa fiscal del caso antes de ejecutar la transmisión.",
+    estado: "pendiente"
+  },
+  {
+    titulo: "Mayor sensibilidad en operativa y trazabilidad de criptoactivos",
+    impacto: "Las estructuras sin documentación o sin criterio pueden quedar expuestas.",
+    afecta: "Inversores con operativa compleja, regularización o historial fragmentado.",
+    accion: "Conviene validar posición, documentación y estrategia antes de regularizar.",
+    estado: "pendiente"
+  }
 ];
 
-  const nodo = document.getElementById("estado-ia-final");
+function renderizarNovedades() {
+  const grid = document.getElementById("novedadesGrid");
+  if (!grid) return;
 
-  let i = 0;
+  grid.innerHTML = "";
 
-  const intervalo = setInterval(() => {
-    if (nodo) {
-      nodo.lastChild.textContent = " " + estados[i];
-    }
+  borradoresNovedades
+    .filter(item => item.estado === "pendiente" || item.estado === "publicado")
+    .forEach((item) => {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `
+        <p style="margin:0 0 10px; color:var(--slate); font-size:13px; letter-spacing:0.08em; text-transform:uppercase;">
+          ${item.estado === "publicado" ? "Publicado" : "Pendiente de validación"}
+        </p>
+        <h3 style="margin-top:0;">${item.titulo}</h3>
+        <p style="margin:0 0 10px; color:var(--charcoal); line-height:1.7;">
+          <strong>Impacto:</strong> ${item.impacto}
+        </p>
+        <p style="margin:0 0 10px; color:var(--charcoal); line-height:1.7;">
+          <strong>A quién afecta:</strong> ${item.afecta}
+        </p>
+        <p style="margin:0; color:var(--charcoal); line-height:1.7;">
+          <strong>Acción sugerida:</strong> ${item.accion}
+        </p>
+      `;
+      grid.appendChild(div);
+    });
+}
 
-    i++;
+document.addEventListener("DOMContentLoaded", renderizarNovedades);
+</script>
+<section class="container" style="padding-top:20px; padding-bottom:80px;" id="panel-interno">
 
-    if (i >= estados.length) {
-      clearInterval(intervalo);
-      const bloque = document.getElementById("diagnostico-pro");
+  <div class="card" style="max-width:980px; background:var(--midnight); color:var(--white); border:none;">
 
-if (bloque) {
-  bloque.style.display = "block";
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; margin-bottom:24px;">
+      <div>
+        <p style="margin:0 0 10px; color:#c7c9d1; font-size:13px; letter-spacing:0.08em; text-transform:uppercase;">
+          Panel interno
+        </p>
+        <h2 style="font-size:30px; line-height:1.2;">
+          Control de borradores y leads
+        </h2>
+      </div>
 
-  document.getElementById("perfil-detectado").innerText =
-    perfilUsuario ? "Perfil detectado: " + perfilUsuario : "";
+      <button class="btn-primary" onclick="togglePanelInterno()">
+        Mostrar / ocultar
+      </button>
+    </div>
 
-  let encaje = "Medio";
-  let complejidad = "Intermedia";
-  let prioridad = "Conveniente";
+    <div id="panelInternoContenido" style="display:none;">
 
-  if (perfilUsuario === "Autónomo") {
-    encaje = "Alto";
-    complejidad = "Intermedia";
-    prioridad = "Prioritaria";
+      <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); margin-bottom:28px;">
+
+        <div class="card" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:var(--white);">
+          <p style="margin:0 0 8px; color:#c7c9d1; font-size:13px;">Leads guardados</p>
+          <p id="panelLeadsTotal" style="margin:0; font-size:28px; font-family:'JetBrains Mono', monospace;">0</p>
+        </div>
+
+        <div class="card" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:var(--white);">
+          <p style="margin:0 0 8px; color:#c7c9d1; font-size:13px;">Score acumulado actual</p>
+          <p id="panelScoreTotal" style="margin:0; font-size:28px; font-family:'JetBrains Mono', monospace;">0</p>
+        </div>
+
+        <div class="card" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:var(--white);">
+          <p style="margin:0 0 8px; color:#c7c9d1; font-size:13px;">Borradores de novedades</p>
+          <p id="panelBorradoresTotal" style="margin:0; font-size:28px; font-family:'JetBrains Mono', monospace;">0</p>
+        </div>
+
+      </div>
+
+      <div class="card" style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); color:var(--white);">
+        <p style="margin:0 0 12px; color:#c7c9d1; font-size:13px; letter-spacing:0.08em; text-transform:uppercase;">
+          Últimos leads
+        </p>
+        <div id="panelLeadsListado" style="color:#f1f2f5; line-height:1.8;">
+          Sin datos todavía.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+<script>
+function togglePanelInterno() {
+  const panel = document.getElementById("panelInternoContenido");
+  if (!panel) return;
+
+  const visible = panel.style.display === "block";
+  panel.style.display = visible ? "none" : "block";
+
+  if (!visible) {
+    refrescarPanelInterno();
+  }
+}
+
+function refrescarPanelInterno() {
+  const leads = JSON.parse(localStorage.getItem("crmLeads") || "[]");
+  const score = localStorage.getItem("leadScoreTotal") || "0";
+  const borradores = borradoresNovedades.length;
+
+  const totalLeads = document.getElementById("panelLeadsTotal");
+  const totalScore = document.getElementById("panelScoreTotal");
+  const totalBorradores = document.getElementById("panelBorradoresTotal");
+  const listado = document.getElementById("panelLeadsListado");
+
+  if (totalLeads) totalLeads.innerText = leads.length;
+  if (totalScore) totalScore.innerText = score;
+  if (totalBorradores) totalBorradores.innerText = borradores;
+
+  if (!listado) return;
+
+  if (leads.length === 0) {
+    listado.innerHTML = "Sin datos todavía.";
+    return;
   }
 
-  if (perfilUsuario === "Empresa") {
-    encaje = "Alto";
-    complejidad = "Avanzada";
-    prioridad = "Prioritaria";
+  listado.innerHTML = leads.slice(-5).reverse().map((lead) => {
+    return `
+      <div style="padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.08);">
+        <strong>${lead.email || "Sin email"}</strong><br>
+        <span style="color:#c7c9d1;">Origen:</span> ${lead.origen || "—"}<br>
+        <span style="color:#c7c9d1;">Estado:</span> ${lead.estado || "nuevo"}<br>
+        <span style="color:#c7c9d1;">Score:</span> ${lead.score || 0}
+      </div>
+    `;
+  }).join("");
+}
+</script>
+<section class="container" style="padding-top:20px; padding-bottom:80px;" id="confianza-legal">
+
+  <div class="card" style="max-width:980px;">
+
+    <p style="margin:0 0 10px; color:var(--slate); font-size:13px; letter-spacing:0.08em; text-transform:uppercase;">
+      Marco profesional
+    </p>
+
+    <h2 style="font-size:30px; line-height:1.2; margin-bottom:16px;">
+      Criterio técnico, validación profesional y tratamiento responsable de la información
+    </h2>
+
+    <p style="max-width:820px; color:var(--charcoal); line-height:1.8; margin-bottom:26px;">
+      La plataforma está diseñada para identificar situaciones donde puede existir recorrido real de revisión, riesgo relevante o necesidad de intervención prioritaria. No sustituye un análisis profesional completo ni asesoramiento individualizado hasta que el caso haya sido validado expresamente.
+    </p>
+
+    <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); margin-bottom:26px;">
+
+      <div class="card" style="background:var(--platinum);">
+        <h3 style="margin-top:0;">Evaluación inicial</h3>
+        <p style="margin:0; color:var(--slate); line-height:1.7;">
+          El resultado inicial es orientativo y se basa en patrones habituales, no en una revisión documental completa del caso.
+        </p>
+      </div>
+
+      <div class="card" style="background:var(--platinum);">
+        <h3 style="margin-top:0;">Confidencialidad</h3>
+        <p style="margin:0; color:var(--slate); line-height:1.7;">
+          La información remitida a través de la plataforma se trata con finalidad de evaluación, contacto profesional y eventual validación del caso.
+        </p>
+      </div>
+
+      <div class="card" style="background:var(--platinum);">
+        <h3 style="margin-top:0;">Criterio de selección</h3>
+        <p style="margin:0; color:var(--slate); line-height:1.7;">
+          No todas las situaciones requieren intervención. El sistema está orientado a casos con complejidad o impacto económico relevante.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px;">
+      <a href="#aviso-legal" class="btn-primary" style="text-align:center; text-decoration:none; display:inline-block;">Aviso legal</a>
+      <a href="#privacidad" class="btn-primary" style="text-align:center; text-decoration:none; display:inline-block;">Privacidad</a>
+      <a href="#cookies" class="btn-primary" style="text-align:center; text-decoration:none; display:inline-block;">Cookies</a>
+    </div>
+
+  </div>
+
+</section>
+<section class="container" style="padding-top:20px; padding-bottom:80px;" id="legal-textos">
+
+  <div class="grid" style="grid-template-columns:1fr; gap:18px; max-width:980px;">
+
+    <div class="card" id="aviso-legal">
+      <h3 style="margin-top:0;">Aviso legal</h3>
+      <p style="color:var(--slate); line-height:1.8; margin:0;">
+        Este sitio tiene carácter informativo y de evaluación inicial. La información mostrada no constituye asesoramiento fiscal individualizado ni sustituye una revisión profesional del caso concreto. La activación de una validación o revisión posterior podrá implicar la prestación de servicios profesionales conforme al alcance que se acuerde en cada caso.
+      </p>
+    </div>
+
+    <div class="card" id="privacidad">
+      <h3 style="margin-top:0;">Privacidad</h3>
+      <p style="color:var(--slate); line-height:1.8; margin:0;">
+        Los datos facilitados a través de formularios, chatbot, simulador o canales de contacto podrán ser tratados con la finalidad de evaluar la consulta, gestionar la relación profesional y realizar comunicaciones vinculadas al caso. El usuario podrá ejercer los derechos que procedan en materia de acceso, rectificación, supresión y demás facultades reconocidas por la normativa aplicable.
+      </p>
+    </div>
+
+    <div class="card" id="cookies">
+      <h3 style="margin-top:0;">Cookies y analítica</h3>
+      <p style="color:var(--slate); line-height:1.8; margin:0;">
+        La plataforma podrá utilizar cookies técnicas, de preferencia y de medición con el fin de mejorar la experiencia de usuario, recordar configuraciones y analizar el funcionamiento general del sistema. La configuración concreta de cookies deberá adaptarse a la herramienta de analítica y al gestor de consentimiento que se implante en producción.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+<script>
+function registrarEvento(nombre, detalle = {}) {
+  const eventos = JSON.parse(localStorage.getItem("analyticsEventos") || "[]");
+
+  eventos.push({
+    nombre,
+    detalle,
+    pagina: window.location.pathname || "/",
+    fecha: new Date().toISOString()
+  });
+
+  localStorage.setItem("analyticsEventos", JSON.stringify(eventos));
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  registrarEvento("page_view", {
+    titulo: document.title
+  });
+});
+
+document.addEventListener("click", (e) => {
+  const target = e.target;
+
+  if (target.classList && target.classList.contains("btn-primary")) {
+    registrarEvento("click_btn_primary", {
+      texto: target.innerText || "sin texto"
+    });
   }
+});
+</script>
+<footer style="
+  background:var(--midnight);
+  color:var(--white);
+  padding:40px 20px;
+  margin-top:20px;
+">
+  <div class="container" style="padding-top:0; padding-bottom:0;">
+    <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:24px;">
 
-  if (perfilUsuario === "Inversor") {
-    encaje = "Alto";
-    complejidad = "Avanzada";
-    prioridad = "Prioritaria";
-  }
+      <div>
+        <h3 style="margin-top:0; font-family:'Playfair Display', serif;">Fiscal Strategy</h3>
+        <p style="color:#d7d9df; line-height:1.8; margin:0;">
+          Plataforma de análisis fiscal estratégico, patrimonio, estructuras complejas y fiscalidad internacional en España.
+        </p>
+      </div>
 
-  document.getElementById("encaje").innerText =
-    "Encaje con revisión: " + encaje;
+      <div>
+        <h4 style="margin-top:0; color:#E5D4A1;">Especialización</h4>
+        <p style="color:#d7d9df; line-height:1.8; margin:0;">
+          Internacional · Patrimonio · Herencias · Cripto · Estructuras · No residentes
+        </p>
+      </div>
 
-  document.getElementById("complejidad").innerText =
-    "Complejidad estimada: " + complejidad;
+      <div>
+        <h4 style="margin-top:0; color:#E5D4A1;">Contacto</h4>
+        <p style="color:#d7d9df; line-height:1.8; margin:0;">
+          WhatsApp · Validación profesional · Revisión prioritaria
+        </p>
+      </div>
 
-  document.getElementById("prioridad").innerText =
-    "Prioridad recomendada: " + prioridad;
-  // RESULTADO PRINCIPAL
-document.getElementById("encaje").innerText =
-  "Encaje con revisión: " + encaje;
+    </div>
+  </div>
+</footer>
 
-document.getElementById("complejidad").innerText =
-  "Complejidad estimada: " + complejidad;
-
-document.getElementById("prioridad").innerText =
-  "Prioridad recomendada: " + prioridad;
-
-
-// 🔥 CIERRE PREMIUM (RECOMENDACIÓN INTELIGENTE)
-
-let recomendacion = "Conviene validar si existe margen real de optimización.";
-let siguientePaso = "La vía razonable es una revisión inicial breve antes de decidir activación.";
-
-if (perfilUsuario === "Autónomo") {
-  recomendacion = "Se observan señales compatibles con posible recorrido de revisión.";
-  siguientePaso = "Lo más eficiente es validar estructura, deducciones y margen de optimización antes de mantener la situación actual.";
-}
-
-if (perfilUsuario === "Empresa") {
-  recomendacion = "El perfil presenta encaje claro para revisión estratégica prioritaria.";
-  siguientePaso = "Lo adecuado es revisar estructura societaria, fricciones fiscales y posibles áreas de mejora antes de seguir operando igual.";
-}
-
-if (perfilUsuario === "Inversor") {
-  recomendacion = "El perfil merece validación prioritaria por potencial complejidad y sensibilidad fiscal.";
-  siguientePaso = "La recomendación es revisar primero patrimonio, estructura y eficiencia global antes de descartar recorrido.";
-}
-
-if (perfilUsuario === "Particular") {
-  recomendacion = "Puede existir margen de revisión, aunque requiere validación previa.";
-  siguientePaso = "Lo razonable es confirmar primero si tu situación encaja con una revisión útil antes de activar nada.";
-}
-
-// 🔥 PINTAR RESULTADO FINAL
-document.getElementById("texto-recomendacion").innerText = recomendacion;
-document.getElementById("texto-siguiente-paso").innerText = siguientePaso;
-  let mensajeDetectado = "Hemos detectado una oportunidad real en tu caso.";
-
-if (perfilUsuario === "Autónomo") {
-  mensajeDetectado = "Hemos detectado ineficiencias en deducciones y estructura fiscal de tu actividad.";
-}
-
-if (perfilUsuario === "Empresa") {
-  mensajeDetectado = "Hemos detectado fricción en estructura societaria y posibles ineficiencias fiscales relevantes.";
-}
-
-if (perfilUsuario === "Inversor") {
-  mensajeDetectado = "Hemos detectado ineficiencia en gestión patrimonial y oportunidades de optimización fiscal global.";
-}
-
-if (perfilUsuario === "Particular") {
-  mensajeDetectado = "Hemos detectado posibles áreas de mejora en tu situación fiscal actual.";
-}
-
-document.getElementById("titulo-resultado").innerText = mensajeDetectado;
-}
-
-      if (nodo) {
-        nodo.lastChild.textContent = " ✔ Optimización detectada";
-      }
-
-      boton.innerText = "Accediendo al diagnóstico...";
-      let mensaje = "Hola Sonia, quiero revisar mi situación fiscal.";
-
-if (perfilUsuario === "Autónomo" && nivelInteres === "alto") {
-  mensaje = "Hola Sonia, soy perfil Autónomo. He visto señales de posible optimización y quiero activar el diagnóstico premium para revisar estructura, deducciones y margen real de mejora.";
-}
-else if (perfilUsuario === "Autónomo" && nivelInteres === "medio") {
-  mensaje = "Hola Sonia, soy perfil Autónomo. Antes de activar, quiero una revisión previa para confirmar si existe margen real de optimización.";
-}
-else if (perfilUsuario === "Empresa" && nivelInteres === "alto") {
-  mensaje = "Hola Sonia, soy perfil Empresa. He visto encaje claro para revisión estratégica y quiero activar el diagnóstico premium cuanto antes.";
-}
-else if (perfilUsuario === "Empresa" && nivelInteres === "medio") {
-  mensaje = "Hola Sonia, soy perfil Empresa. Quiero una revisión previa para validar si existe recorrido real de optimización antes de activar.";
-}
-else if (perfilUsuario === "Inversor" && nivelInteres === "alto") {
-  mensaje = "Hola Sonia, soy perfil Inversor. He visto señales compatibles con revisión prioritaria y quiero activar el diagnóstico premium para analizar patrimonio y eficiencia global.";
-}
-else if (perfilUsuario === "Inversor" && nivelInteres === "medio") {
-  mensaje = "Hola Sonia, soy perfil Inversor. Antes de activar, me gustaría validar si existe recorrido real de revisión patrimonial y fiscal.";
-}
-else if (perfilUsuario === "Particular" && nivelInteres === "alto") {
-  mensaje = "Hola Sonia, soy perfil Particular. He visto señales de posible optimización y quiero activar el diagnóstico premium para validar mi caso.";
-}
-else if (perfilUsuario === "Particular" && nivelInteres === "medio") {
-  mensaje = "Hola Sonia, soy perfil Particular. Quiero una revisión previa para confirmar si mi situación encaja con una revisión útil.";
-}
-else if (perfilUsuario) {
-  mensaje = "Hola Sonia, soy perfil " + perfilUsuario + " y quiero revisar mi situación fiscal.";
-      }
-      setTimeout(() => {
-        const urlApp = "whatsapp://send?phone=34685870983&text=" + encodeURIComponent(mensaje);
-const urlWeb = "https://wa.me/34685870983?text=" + encodeURIComponent(mensaje);
-
-window.location.href = urlApp;
-
-setTimeout(() => {
-  window.location.href = urlWeb;
-}, 800);
-      }, 1200);
-    }
-
-  }, 900);
-      }
-    </script>
-    <script>
-(function () {
-  const estados = [
-    "Sistema evaluando encaje",
-    "Analizando estructura fiscal",
-    "Cruzando variables clave",
-    "Verificando margen real",
-    "Ruta recomendada lista"
-  ];
-
-  const nodo = document.getElementById("estado-ia-final");
-  if (!nodo) return;
-
-  let i = 0;
-  setInterval(() => {
-    i = (i + 1) % estados.length;
-    nodo.lastChild.textContent = " " + estados[i];
-  }, 1800);
-})();
-      </script>
+</body>
+</html>
